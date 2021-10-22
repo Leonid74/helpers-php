@@ -1,0 +1,44 @@
+{
+    "name": "leonid74/helpers-php",
+    "description": "Helper classes for processing all types of data",
+    "keywords": [
+        "helpers",
+        "helpers-php"
+    ],
+    "homepage": "https://github.com/leonid74/helpers-php",
+    "minimum-stability": "stable",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "leonid74",
+            "homepage": "https://github.com/leonid74/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.0"
+    },
+    "require-dev": {
+        "automattic/phpcs-neutron-standard": "^1.7",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+        "squizlabs/php_codesniffer": "^3.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Leonid74\\Helpers\\": "src/"
+        }
+    },
+    "scripts": {
+        "post-update-cmd": [
+            "@composer dump-autoload"
+        ],
+        "check-code": [
+            "phpcs -sp src/ tests/"
+        ]
+    },
+    "config": {
+        "process-timeout": 0,
+        "sort-packages": true,
+        "optimize-autoloader": true
+    }
+}
