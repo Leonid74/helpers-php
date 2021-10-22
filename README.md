@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c1b4a51c86b746fbbfc20f82a0aa2f9f)](https://app.codacy.com/gh/Leonid74/helpers-php?utm_source=github.com&utm_medium=referral&utm_content=Leonid74/helpers-php&utm_campaign=Badge_Grade_Settings)
 [![License](https://img.shields.io/badge/license-BSD-blue.svg?maxAge=43200)](./LICENSE)
 [![Author](https://img.shields.io/badge/author-Leonid74-blue.svg)](https://github.com/Leonid74)
 [![Latest Stable Version](https://img.shields.io/github/v/release/Leonid74/helpers-php)](https://github.com/Leonid74/helpers-php/releases/latest)
