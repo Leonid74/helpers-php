@@ -1,12 +1,12 @@
 {
     "name": "leonid74/helpers-php",
+    "type": "library",
     "description": "Helper classes for processing all types of data",
     "keywords": [
         "helpers",
         "helpers-php"
     ],
     "homepage": "https://github.com/leonid74/helpers-php",
-    "minimum-stability": "stable",
     "license": "BSD-3-Clause",
     "authors": [
         {
