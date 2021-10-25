@@ -8,7 +8,7 @@
 [![Code Inspector](https://www.code-inspector.com/project/29479/score/svg)](https://frontend.code-inspector.com/home)
 
 # helpers-php
-***Under active development. Not yet for prime production.***
+***Under active development.***
 
 Helper classes for processing all types of data
 
