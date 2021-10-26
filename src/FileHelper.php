@@ -1,4 +1,5 @@
-<?php declare( strict_types=1 );
+<?php
+
 /**
  * Helper class for processing files
  * Класс для обработки файлов
@@ -19,31 +20,37 @@ class FileHelper
 {
     /**
      * Gets name of the filename only (without dot and extension)
-     * Получаем только имя файла без точки и без расширения.
      *
-     * @param string $filename
+     * @param string $sFilename
      *
-     * @return string|bool
-     *
-     * @author Leonid Sheikman <leonid@sheikman.ru>
+     * @return string
      */
-    public static function getFileNameOnly( string $filename = '' ): string
+    public static function getFileNameOnly( ?string $sFilename = '' ): string
     {
-        return ( is_string( $filename ) && !empty( trim( $filename ) ) ) ? pathinfo( $filename, PATHINFO_FILENAME ) : false;
+        if ( '' === $sFilename || \is_null( $sFilename ) ) {
+            return '';
+        }
+
+        $sParsed = \pathinfo( \trim( $sFilename ), PATHINFO_FILENAME );
+
+        return $sParsed ? $sParsed : '';
     }
 
     /**
      * Gets filename extension only (without dot and name)
-     * Получаем только расширение файла без точки и без имени.
      *
-     * @param string $filename
+     * @param string $sFilename
      *
-     * @return string|bool
-     *
-     * @author Leonid Sheikman <leonid@sheikman.ru>
+     * @return string
      */
-    public static function getFileExtOnly( string $filename = '' ): string
+    public static function getFileExtOnly( ?string $sFilename = '' ): string
     {
-        return ( is_string( $filename ) && !empty( trim( $filename ) ) ) ? pathinfo( $filename, PATHINFO_EXTENSION ) : false;
+        if ( '' === $sFilename || \is_null( $sFilename ) ) {
+            return '';
+        }
+
+        $sParsed = \pathinfo( \trim( $sFilename ), PATHINFO_EXTENSION );
+
+        return $sParsed ? $sParsed : '';
     }
 }

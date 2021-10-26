@@ -26,7 +26,7 @@ class StringHelper
      */
     public static function removeBOM( ?string $sString = '' ): string
     {
-        if ( '' === $sString || is_null( $sString ) ) {
+        if ( '' === $sString || \is_null( $sString ) ) {
             return '';
         }
 
@@ -47,7 +47,7 @@ class StringHelper
      */
     public static function truncateString( ?string $sString = '', int $iLength = 100, string $sSuffix = '...' ): string
     {
-        if ( '' === $sString || is_null( $sString ) ) {
+        if ( '' === $sString || \is_null( $sString ) ) {
             return '';
         }
 

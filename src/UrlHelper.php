@@ -29,7 +29,7 @@ class UrlHelper
      */
     public static function addTrailingSlash( ?string $sUrl = '' ): string
     {
-        if ( '' === $sUrl || is_null( $sUrl ) ) {
+        if ( '' === $sUrl || \is_null( $sUrl ) ) {
             return '/';
         }
 
@@ -47,7 +47,7 @@ class UrlHelper
      */
     public static function removeTrailingSlash( ?string $sUrl = '' ): string
     {
-        if ( '' === $sUrl || is_null( $sUrl ) ) {
+        if ( '' === $sUrl || \is_null( $sUrl ) ) {
             return '';
         }
 
@@ -66,7 +66,7 @@ class UrlHelper
      */
     public static function prependSlash( ?string $sUrl = '' ): string
     {
-        if ( '' === $sUrl || is_null( $sUrl ) ) {
+        if ( '' === $sUrl || \is_null( $sUrl ) ) {
             return '/';
         }
 
@@ -84,13 +84,13 @@ class UrlHelper
      */
     public static function getHostOnly( ?string $sUrl = '' ): string
     {
-        if ( '' === $sUrl || is_null( $sUrl ) ) {
+        if ( '' === $sUrl || \is_null( $sUrl ) ) {
             return '';
         }
 
-        $aParsedUrl = parse_url( trim( $sUrl ) );
+        $aParsedUrl = \parse_url( \trim( $sUrl ) );
 
-        return $aParsedUrl['host'] ? $aParsedUrl['host'] : array_shift( explode( '/', $aParsedUrl['path'], 2 ) );
+        return $aParsedUrl['host'] ? $aParsedUrl['host'] : \array_shift( \explode( '/', $aParsedUrl['path'], 2 ) );
     }
 
     /**
@@ -104,13 +104,13 @@ class UrlHelper
      */
     public static function getHostWithScheme( ?string $sUrl = '' ): string
     {
-        if ( '' === $sUrl || is_null( $sUrl ) ) {
+        if ( '' === $sUrl || \is_null( $sUrl ) ) {
             return '';
         }
 
-        $aParsedUrl = parse_url( trim( $sUrl ) );
+        $aParsedUrl = \parse_url( \trim( $sUrl ) );
 
-        return $aParsedUrl['scheme'] . '://' . ( $aParsedUrl['host'] ? $aParsedUrl['host'] : array_shift( explode( '/', $aParsedUrl['path'], 2 ) ) );
+        return $aParsedUrl['scheme'] . '://' . ( $aParsedUrl['host'] ? $aParsedUrl['host'] : \array_shift( \explode( '/', $aParsedUrl['path'], 2 ) ) );
     }
 
     /**
@@ -124,12 +124,12 @@ class UrlHelper
      */
     public static function getHostWithSchemeAndPath( ?string $sUrl = '' ): string
     {
-        if ( '' === $sUrl || is_null( $sUrl ) ) {
+        if ( '' === $sUrl || \is_null( $sUrl ) ) {
             return '';
         }
 
-        $aParsedUrl = parse_url( trim( $sUrl ) );
+        $aParsedUrl = \parse_url( \trim( $sUrl ) );
 
-        return $aParsedUrl['scheme'] . '://' . ( $aParsedUrl['host'] ? $aParsedUrl['host'] . $aParsedUrl['path'] : array_shift( explode( '/', $aParsedUrl['path'], 2 ) ) );
+        return $aParsedUrl['scheme'] . '://' . ( $aParsedUrl['host'] ? $aParsedUrl['host'] . $aParsedUrl['path'] : \array_shift( \explode( '/', $aParsedUrl['path'], 2 ) ) );
     }
 }
