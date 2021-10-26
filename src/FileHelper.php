@@ -2,7 +2,6 @@
 
 /**
  * Helper class for processing files
- * Класс для обработки файлов
  *
  * This file is part of the project.
  *
