@@ -1,7 +1,7 @@
-<?php declare( strict_types=1 );
+<?php
+
 /**
  * Helper class for processing URL/URI strings
- * Класс для обработки данных из строк URL/URI
  *
  * This file is part of the project.
  *
@@ -18,65 +18,118 @@ namespace Leonid74\Helpers;
 class UrlHelper
 {
     /**
-     * Gets hostname only
-     * Получаем имя хоста без схемы (hostname.ru).
+     * Add a trailing slash to the string
      *
-     * @param string $urlAddress 'http://username:password@hostname:9090/path?arg=value#anchor'
+     * UrlHelper::addTrailingSlash('https://aaa.bbb.ccc');   // returns 'https://aaa.bbb.ccc/'
+     * UrlHelper::addTrailingSlash('https://aaa.bbb.ccc/');  // returns 'https://aaa.bbb.ccc/'
      *
-     * @return string hostname.ru
+     * @param string $sUrl
      *
-     * @author Leonid Sheikman <leonid@sheikman.ru>
+     * @return string
      */
-    public static function getHostOnly( string $urlAddress = '' ): string
+    public static function addTrailingSlash( ?string $sUrl = '' ): string
     {
-        if ( empty( $urlAddress ) ) {
-            return '';
+        if ( '' === $sUrl || is_null( $sUrl ) ) {
+            return '/';
         }
 
-        $parseUrl = parse_url( trim( $urlAddress ) );
-
-        return trim( $parseUrl['host'] ? $parseUrl['host'] : array_shift( explode( '/', $parseUrl['path'], 2 ) ) );
+        return \rtrim( $sUrl, '/' ) . '/';
     }
 
     /**
-     * Gets hostname and scheme only
-     * Получаем имя хоста со схемой (https://hostname.ru).
+     * Remove a trailing slash from the string
      *
-     * @param string $urlAddress 'http://username:password@hostname:9090/path?arg=value#anchor'
+     * UrlHelper::removeTrailingSlash('https://aaa.bbb.ccc/');  // returns 'https://aaa.bbb.ccc'
      *
-     * @return string https://hostname.ru
+     * @param string $sUrl
      *
-     * @author Leonid Sheikman <leonid@sheikman.ru>
+     * @return string
      */
-    public static function getHostWithScheme( string $urlAddress = '' ): string
+    public static function removeTrailingSlash( ?string $sUrl = '' ): string
     {
-        if ( empty( $urlAddress ) ) {
+        if ( '' === $sUrl || is_null( $sUrl ) ) {
             return '';
         }
 
-        $parseUrl = parse_url( trim( $urlAddress ) );
-
-        return $parseUrl['scheme'] . '://' . ( trim( $parseUrl['host'] ? $parseUrl['host'] : array_shift( explode( '/', $parseUrl['path'], 2 ) ) ) );
+        return \rtrim( $sUrl, '/' );
     }
 
     /**
-     * Gets hostname with scheme and path only
-     * Получаем имя хоста со схемой и путём, без параметров запроса (https://hostname.ru/path).
+     * Add a slash to the beginning of the string
      *
-     * @param string $urlAddress 'http://username:password@hostname:9090/path?arg=value#anchor'
+     * UrlHelper::prependSlash('aaa/bbb/ccc');   // returns '/aaa/bbb/ccc'
+     * UrlHelper::prependSlash('/aaa/bbb/ccc');  // returns '/aaa/bbb/ccc'
      *
-     * @return string https://hostname.ru/path
+     * @param string $sUrl
      *
-     * @author Leonid Sheikman <leonid@sheikman.ru>
+     * @return string
      */
-    public static function getHostWithSchemeAndPath( string $urlAddress = '' ): string
+    public static function prependSlash( ?string $sUrl = '' ): string
     {
-        if ( empty( $urlAddress ) ) {
+        if ( '' === $sUrl || is_null( $sUrl ) ) {
+            return '/';
+        }
+
+        return '/' . \ltrim( $sUrl, '/' );
+    }
+
+    /**
+     * Gets the hostname without the scheme prefix only
+     *
+     * UrlHelper::getHostOnly('https://aaa.bbb.ccc:9090/path?arg=value#anchor');  // returns 'aaa.bbb.ccc'
+     *
+     * @param string $sUrl
+     *
+     * @return string
+     */
+    public static function getHostOnly( ?string $sUrl = '' ): string
+    {
+        if ( '' === $sUrl || is_null( $sUrl ) ) {
             return '';
         }
 
-        $parseUrl = parse_url( trim( $urlAddress ) );
+        $aParsedUrl = parse_url( trim( $sUrl ) );
 
-        return $parseUrl['scheme'] . '://' . ( trim( $parseUrl['host'] ? $parseUrl['host'] . $parseUrl['path'] : array_shift( explode( '/', $parseUrl['path'], 2 ) ) ) );
+        return $aParsedUrl['host'] ? $aParsedUrl['host'] : array_shift( explode( '/', $aParsedUrl['path'], 2 ) );
+    }
+
+    /**
+     * Gets the hostname with the scheme prefix only
+     *
+     * UrlHelper::getHostWithScheme('https://aaa.bbb.ccc:9090/path?arg=value#anchor');  // returns 'https://aaa.bbb.ccc'
+     *
+     * @param string $sUrl
+     *
+     * @return string
+     */
+    public static function getHostWithScheme( ?string $sUrl = '' ): string
+    {
+        if ( '' === $sUrl || is_null( $sUrl ) ) {
+            return '';
+        }
+
+        $aParsedUrl = parse_url( trim( $sUrl ) );
+
+        return $aParsedUrl['scheme'] . '://' . ( $aParsedUrl['host'] ? $aParsedUrl['host'] : array_shift( explode( '/', $aParsedUrl['path'], 2 ) ) );
+    }
+
+    /**
+     * Gets the hostname with the scheme prefix and path only
+     *
+     * UrlHelper::getHostWithSchemeAndPath('https://aaa.bbb.ccc:9090/path?arg=value#anchor');  // returns 'https://aaa.bbb.ccc/path'
+     *
+     * @param string $sUrl
+     *
+     * @return string
+     */
+    public static function getHostWithSchemeAndPath( ?string $sUrl = '' ): string
+    {
+        if ( '' === $sUrl || is_null( $sUrl ) ) {
+            return '';
+        }
+
+        $aParsedUrl = parse_url( trim( $sUrl ) );
+
+        return $aParsedUrl['scheme'] . '://' . ( $aParsedUrl['host'] ? $aParsedUrl['host'] . $aParsedUrl['path'] : array_shift( explode( '/', $aParsedUrl['path'], 2 ) ) );
     }
 }

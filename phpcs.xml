@@ -5,6 +5,7 @@
 
     <exclude-pattern>*/.history/*</exclude-pattern>
     <exclude-pattern>*/.vscode/*</exclude-pattern>
+	<exclude-pattern>*/logs/*</exclude-pattern>
     <exclude-pattern>*/tests/*</exclude-pattern>
     <exclude-pattern>*/vendor/*</exclude-pattern>
 
@@ -108,5 +109,7 @@
         </properties>
     </rule>
 
-    <rule ref="NeutronStandard"/>
+	<rule ref="NeutronStandard">
+		<exclude name="NeutronStandard.StrictTypes.RequireStrictTypes.StrictTypes"/>
+	</rule>
 </ruleset>

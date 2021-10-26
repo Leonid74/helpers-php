@@ -1,4 +1,5 @@
-<?php declare( strict_types=1 );
+<?php
+
 /**
  * Helper class for processing strings
  *
@@ -17,50 +18,18 @@ namespace Leonid74\Helpers;
 class StringHelper
 {
     /**
-     * Add a trailing slash to the string
-     *
-     * @param string $sString
-     *
-     * @return string
-     */
-    public static function addTrailingSlash( string $sString = '' ): string
-    {
-        return \rtrim( $sString, '/' ) . '/';
-    }
-
-    /**
-     * Remove a trailing slash from the string
-     *
-     * @param string $sString
-     *
-     * @return string
-     */
-    public static function removeTrailingSlash( string $sString = '' ): string
-    {
-        return \rtrim( $sString, '/' );
-    }
-
-    /**
-     * Add a slash to the beginning of the string
-     *
-     * @param string $sString
-     *
-     * @return string
-     */
-    public static function prependSlash( string $sString = '' ): string
-    {
-        return '/' . \ltrim( $sString, '/' );
-    }
-
-    /**
      * Remove BOM from the string
      *
      * @param string $sString
      *
      * @return string
      */
-    public static function removeBOM( string $sString = '' ): string
+    public static function removeBOM( ?string $sString = '' ): string
     {
+        if ( '' === $sString || is_null( $sString ) ) {
+            return '';
+        }
+
         return 0 === \strncasecmp( \pack( 'CCC', 0xef, 0xbb, 0xbf ), $sString, 3 ) ? \mb_substr( $sString, 3 ) : $sString;
     }
 
@@ -71,21 +40,21 @@ class StringHelper
      * StringHelper::truncateString('Lorem ipsum inum', 15, '>>>');  // returns 'Lorem ipsum >>>'
      *
      * @param string $sString
-     * @param int    $iLength
+     * @param int    $iLength (defaults to 100)
      * @param string $sSuffix (optional, defaults to '...')
      *
      * @return string
      */
-    public static function truncateString( string $sString, int $iLength, ?string $sSuffix = '...' ): string
+    public static function truncateString( ?string $sString = '', int $iLength = 100, string $sSuffix = '...' ): string
     {
-        $iLengthOfSuffix = \mb_strlen( $sSuffix );
+        if ( '' === $sString || is_null( $sString ) ) {
+            return '';
+        }
 
-        if ( \mb_strlen( $sString ) <= ( $iLength - $iLengthOfSuffix ) ) {
+        if ( $iLength <= 0 || \mb_strlen( $sString ) <= $iLength ) {
             return $sString;
         }
 
-        $sTruncatedString = \mb_substr( $sString, 0, $iLength - $iLengthOfSuffix );
-
-        return $sTruncatedString . $sSuffix;
+        return \mb_substr( $sString, 0, $iLength - \mb_strlen( $sSuffix ) ) . $sSuffix;
     }
 }
