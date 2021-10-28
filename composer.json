@@ -16,11 +16,12 @@
         }
     ],
     "require": {
-        "php": ">=7.0"
+        "php": ">=7.1"
     },
     "require-dev": {
         "automattic/phpcs-neutron-standard": "^1.7",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+        "phpunit/phpunit": "9",
         "squizlabs/php_codesniffer": "^3.5"
     },
     "autoload": {
@@ -34,6 +35,9 @@
         ],
         "check-code": [
             "phpcs -sp src/ tests/"
+        ],
+        "tests": [
+            "@php vendor/bin/phpunit tests"
         ]
     },
     "config": {
