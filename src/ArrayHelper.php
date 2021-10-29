@@ -20,9 +20,12 @@ class ArrayHelper
     /**
      * Checks if the given KEY or INDEX exists in the one- or multi-dimensional array
      *
+     * Arrays in PHP handle an integer key and a string integer key identically, so it is
+     * pointless to specify a type match for keys
+     *
      * @param mixed $mNeedle
      * @param array $aHaystack
-     * @param bool  $bCaseInsensitive (optional, defaults to false)
+     * @param bool  $bCaseInsensitive  (optional, defaults to false)
      * @param bool  $bProcessSubarrays (optional, defaults to true)
      *
      * @return bool
@@ -33,35 +36,31 @@ class ArrayHelper
         bool $bCaseInsensitive = false,
         bool $bProcessSubarrays = true
     ): bool {
-        if ( '' === $mNeedle || \is_null( $mNeedle ) ) {
-            return false;
-        }
+        $result = false;
 
-        if ( 0 === count( $aHaystack ) ) {
-            return false;
-        }
+        if ( '' !== $mNeedle && !\is_null( $mNeedle ) ) {
+            foreach ( $aHaystack as $key => $mItem ) {
+                if ( $bCaseInsensitive ) {
+                    $result = \mb_strtolower( $mNeedle ) == \mb_strtolower( $key );
+                } else {
+                    $result = (string) $mNeedle == (string) $key;
+                }
 
-        if ( $bCaseInsensitive ) {
-            if ( \in_array( \mb_strtolower( $mNeedle ), \array_map( 'mb_strtolower', \array_keys( $aHaystack ) ) ) ) {
-                return true;
-            }
-        } else {
-            if ( \array_key_exists( $mNeedle, $aHaystack ) ) {
-                return true;
-            }
-        }
+                if ( $result ) {
+                    break;
+                }
 
-        if ( $bProcessSubarrays ) {
-            foreach ( $aHaystack as $item ) {
-                if ( \is_array( $item ) ) {
-                    if ( self::arrayKeyExists( $mNeedle, $item, $bCaseInsensitive, $bProcessSubarrays ) ) {
-                        return true;
+                if ( $bProcessSubarrays && \is_array( $mItem ) ) {
+                    $result = self::arrayKeyExists( $mNeedle, $mItem, $bCaseInsensitive, $bProcessSubarrays );
+
+                    if ( $result ) {
+                        break;
                     }
                 }
             }
         }
 
-        return false;
+        return $result;
     }
 
     /**
@@ -82,81 +81,85 @@ class ArrayHelper
         bool $bProcessSubarrays = true,
         bool $bStrictTypes = false
     ): bool {
-        if ( '' === $mNeedle || \is_null( $mNeedle ) ) {
-            return false;
-        }
+        $result = false;
 
-        foreach ( $aHaystack as $mItem ) {
-            if ( \is_array( $mItem ) ) {
-                if ( !$bProcessSubarrays ) {
-                    continue;
-                }
-                $bResult = self::arrayValueExists( $mNeedle, $mItem, $bCaseInsensitive, $bProcessSubarrays, $bStrictTypes );
-            } else {
-                if ( $bCaseInsensitive ) {
-                    $bResult = $bStrictTypes ? ( \gettype( $mNeedle ) == \gettype( $mItem ) && \mb_strtolower( $mNeedle ) == \mb_strtolower( $mItem ) ) : \mb_strtolower( $mNeedle ) == \mb_strtolower( $mItem );
+        if ( '' !== $mNeedle && !\is_null( $mNeedle ) ) {
+            foreach ( $aHaystack as $mItem ) {
+                if ( \is_array( $mItem ) ) {
+                    if ( !$bProcessSubarrays ) {
+                        continue;
+                    }
+                    $result = self::arrayValueExists( $mNeedle, $mItem, $bCaseInsensitive, $bProcessSubarrays, $bStrictTypes );
                 } else {
-                    $bResult = $bStrictTypes ? $mNeedle === $mItem : (string) $mNeedle == (string) $mItem;
+                    if ( $bCaseInsensitive ) {
+                        $result = $bStrictTypes ? ( \gettype( $mNeedle ) == \gettype( $mItem ) && \mb_strtolower( $mNeedle ) == \mb_strtolower( $mItem ) ) : \mb_strtolower( $mNeedle ) == \mb_strtolower( $mItem );
+                    } else {
+                        $result = $bStrictTypes ? $mNeedle === $mItem : (string) $mNeedle == (string) $mItem;
+                    }
                 }
-            }
 
-            if ( $bResult ) {
-                return true;
+                if ( $result ) {
+                    break;
+                }
             }
         }
 
-        return false;
+        return $result;
     }
 
     /**
-     * Searches in the one- or multi-dimensional array for a given VALUE and returns the first corresponding key if successful
+     * Searches in the one- or multi-dimensional array for a given VALUE and returns the first
+     * corresponding key if successful
      *
      * @param mixed $mNeedle
      * @param array $aHaystack
-     * @param bool  $bCaseInsensitive (optional, defaults to false)
+     * @param bool  $bCaseInsensitive  (optional, defaults to false)
      * @param bool  $bProcessSubarrays (optional, defaults to true)
+     * @param bool  $bStrictTypes      (optional, defaults to false)
      *
      * @return mixed
      */
     public static function arraySearch(
-        ?mixed $mNeedle,
+        $mNeedle,
         array $aHaystack,
         bool $bCaseInsensitive = false,
-        bool $bProcessSubarrays = true
-    ): mixed {
-        if ( '' === $mNeedle || \is_null( $mNeedle ) ) {
-            return false;
-        }
+        bool $bProcessSubarrays = true,
+        bool $bStrictTypes = false
+    ) {
+        $result = false;
 
-        if ( 0 === count( $aHaystack ) ) {
-            return false;
-        }
+        if ( '' !== $mNeedle && !\is_null( $mNeedle ) ) {
+            foreach ( $aHaystack as $key => $mItem ) {
+                if ( \is_array( $mItem ) ) {
+                    if ( !$bProcessSubarrays ) {
+                        continue;
+                    }
+                    $result = self::arraySearch( $mNeedle, $mItem, $bCaseInsensitive, $bProcessSubarrays, $bStrictTypes );
 
-        if ( $bCaseInsensitive ) {
-            $result = \array_search( \mb_strtolower( $mNeedle ), \array_map( 'mb_strtolower', $aHaystack ) );
-        } else {
-            $result = \array_search( $mNeedle, $aHaystack );
-        }
-        if ( false !== $result ) {
-            return $result;
-        }
-
-        if ( $bProcessSubarrays ) {
-            foreach ( $aHaystack as $item ) {
-                if ( \is_array( $item ) ) {
-                    $result = self::arraySearch( $mNeedle, $item, $bCaseInsensitive, $bProcessSubarrays );
                     if ( false !== $result ) {
-                        return $result;
+                        break;
+                    }
+                } else {
+                    if ( $bCaseInsensitive ) {
+                        $result = $bStrictTypes ? ( \gettype( $mNeedle ) == \gettype( $mItem ) && \mb_strtolower( $mNeedle ) == \mb_strtolower( $mItem ) ) : \mb_strtolower( $mNeedle ) == \mb_strtolower( $mItem );
+                    } else {
+                        $result = $bStrictTypes ? $mNeedle === $mItem : (string) $mNeedle == (string) $mItem;
+                    }
+
+                    if ( false !== $result ) {
+                        $result = $key;
+                        break;
                     }
                 }
             }
         }
 
-        return false;
+        return $result;
     }
 
     /**
-     * Searches in the one- or multi-dimensional array for a given SUBSTRING and returns the first corresponding key if successful
+     * Searches in the one- or multi-dimensional array for a given SUBSTRING and returns the first
+     * corresponding key if successful
      *
      * @param mixed $mNeedle
      * @param array $aHaystack
@@ -166,63 +169,33 @@ class ArrayHelper
      * @return mixed
      */
     public static function arrayStrPos(
-        ?mixed $mNeedle,
+        $mNeedle,
         array $aHaystack,
         bool $bCaseInsensitive = false,
         bool $bProcessSubarrays = true
-    ): mixed {
-        if ( '' === $mNeedle || \is_null( $mNeedle ) ) {
-            return false;
-        }
-
-        if ( 0 === count( $aHaystack ) ) {
-            return false;
-        }
-
+    ) {
         $result = false;
-        if ( $bCaseInsensitive ) {
-            foreach ( $aHaystack as $key => $item ) {
-                if ( \is_array( $item ) ) {
-                    $result = self::arrayStrPos( $mNeedle, $item, $bCaseInsensitive, $bProcessSubarrays );
+
+        if ( '' !== $mNeedle && !\is_null( $mNeedle ) ) {
+            foreach ( $aHaystack as $key => $mItem ) {
+                if ( \is_array( $mItem ) ) {
+                    if ( !$bProcessSubarrays ) {
+                        continue;
+                    }
+                    $result = self::arrayStrPos( $mNeedle, $mItem, $bCaseInsensitive, $bProcessSubarrays );
+
                     if ( false !== $result ) {
                         break;
                     }
                 } else {
-                    if ( false !== \mb_stripos( $item, $mNeedle ) ) {
-                        $result = $key;
-                        break;
-                    }
-                }
-            }
-        } else {
-            foreach ( $aHaystack as $key => $item ) {
-                if ( \is_array( $item ) ) {
-                    $result = self::arrayStrPos( $mNeedle, $item, $bCaseInsensitive, $bProcessSubarrays );
-                    if ( false !== $result ) {
-                        break;
-                    }
-                } else {
-                    if ( false !== \mb_strpos( $item, $mNeedle ) ) {
+                    if ( false !== ( $bCaseInsensitive ? \mb_stripos( $mItem, $mNeedle ) : \mb_strpos( $mItem, $mNeedle ) ) ) {
                         $result = $key;
                         break;
                     }
                 }
             }
         }
-        if ( false !== $result ) {
-            return $result;
-        }
 
-        if ( $bProcessSubarrays ) {
-            foreach ( $aHaystack as $item ) {
-                if ( \is_array( $item ) ) {
-                    if ( self::arraySearch( $mNeedle, $item, $bCaseInsensitive, $bProcessSubarrays ) ) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
+        return $result;
     }
 }
