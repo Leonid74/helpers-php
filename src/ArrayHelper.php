@@ -158,7 +158,7 @@ class ArrayHelper
     }
 
     /**
-     * Searches in the one- or multi-dimensional array for a given SUBSTRING and returns the first
+     * Searches in the one- or multi-dimensional array for a given SUBSTRING in the VALUE and returns the first
      * corresponding key if successful
      *
      * @param mixed $mNeedle

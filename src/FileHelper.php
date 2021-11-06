@@ -18,7 +18,8 @@ namespace Leonid74\Helpers;
 class FileHelper
 {
     /**
-     * Gets name of the filename only (without dot and extension)
+     * Gets name of the filename only (without dot and extension).
+     * If the file name contains several dots (file.name.ext) - return all parts before the last dot.
      *
      * @param string $sFilename
      *
