@@ -1,4 +1,6 @@
-# VisualStudioCode.gitignore
+# VisualStudioCode
+.gitignore
+.gitattributes
 .history/
 .vscode/
 .vscode-test
@@ -31,15 +33,18 @@ $RECYCLE.BIN/
 
 # My gitignores
 .idea/
-/vendor/
+.phpunit.cache/
 logs/
+/vendor/
 /tests/
 composer.lock
 config.php
 settings.php
+phpunit.xml
 .env
 .php_cs.dist
-.pnp.*
+.php.*
+*.cache
 *.log
 *.sql
 *.sqlite
