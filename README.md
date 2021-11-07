@@ -4,6 +4,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/leonid74/helpers-php/badge)](https://www.codefactor.io/repository/github/leonid74/helpers-php)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/5de729cad22c4c2bb67a030d96fbf0b0)](https://www.codacy.com/gh/Leonid74/helpers-php/dashboard)
 [![Code Inspector](https://www.code-inspector.com/project/29479/status/svg)](https://frontend.code-inspector.com/home)
+[![codecov](https://codecov.io/gh/Leonid74/helpers-php/branch/master/graph/badge.svg?token=CNMD7EZNIX)](https://codecov.io/gh/Leonid74/helpers-php)
 
 # helpers-php
 ***Under active development.***
