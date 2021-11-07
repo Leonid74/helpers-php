@@ -1,5 +1,5 @@
 <phpunit
-    bootstrap="tests/autoload.php"
+    bootstrap="vendor/autoload.php"
     cacheResultFile=".phpunit.cache/.phpunit.result.cache"
     backupGlobals="false"
     colors="true"
@@ -9,8 +9,6 @@
     <php>
         <ini name="memory_limit" value="-1"/>
         <ini name="display_errors" value="true"/>
-        <!-- <ini name="xdebug.mode" value="coverage"/>
-        <env name="XDEBUG_MODE" value="coverage"/> -->
     </php>
 
 	<testsuites>
@@ -21,7 +19,7 @@
 
     <coverage cacheDirectory=".phpunit.cache/"
         includeUncoveredFiles="true"
-        pathCoverage="true"
+        pathCoverage="false"
         ignoreDeprecatedCodeUnits="true"
         disableCodeCoverageIgnore="false">
         <include>
@@ -32,12 +30,11 @@
             <file>src/autoload.php</file>
         </exclude> -->
         <report>
-            <html outputDirectory="tests/coverage/html-coverage" lowUpperBound="50" highLowerBound="90"/>
-            <xml outputDirectory="tests/coverage/xml-coverage"/>
-            <clover outputFile="tests/coverage/clover.xml"/>
-            <php outputFile="tests/coverage/coverage.php"/>
-            <text outputFile="tests/coverage/coverage.txt" showUncoveredFiles="false" showOnlySummary="true"/>
-            <!-- <crap4j outputFile="tests/coverage/crap4j.xml" threshold="50"/> -->
+            <html outputDirectory="tests/coverage/html" lowUpperBound="50" highLowerBound="90"/>
+            <!-- <xml outputDirectory="tests/coverage/xml"/> -->
+            <clover outputFile="coverage.xml"/>
+            <!-- <php outputFile="tests/coverage/coverage.php"/> -->
+            <!-- <text outputFile="tests/coverage/coverage.txt" showUncoveredFiles="false" showOnlySummary="true"/> -->
         </report>
     </coverage>
 
