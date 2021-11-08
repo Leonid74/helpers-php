@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1636317601">
-  <project timestamp="1636317601">
+<coverage generated="1636352686">
+  <project timestamp="1636352686">
     <file name="C:\Users\leoni\OneDrive\Dev\GitHub\leonid74\helpers-php\src\ArrayHelper.php">
       <class name="Leonid74\Helpers\ArrayHelper" namespace="global">
         <metrics complexity="41" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="55" coveredstatements="55" elements="59" coveredelements="59"/>

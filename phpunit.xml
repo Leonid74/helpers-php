@@ -1,6 +1,6 @@
 <phpunit
     bootstrap="vendor/autoload.php"
-    cacheResultFile=".phpunit.cache/.phpunit.result.cache"
+    cacheResultFile="tests/cache/.phpunit.result.cache"
     backupGlobals="false"
     colors="true"
     verbose="true"
@@ -17,7 +17,7 @@
 		</testsuite>
 	</testsuites>
 
-    <coverage cacheDirectory=".phpunit.cache/"
+    <coverage cacheDirectory="tests/cache/"
         includeUncoveredFiles="true"
         pathCoverage="false"
         ignoreDeprecatedCodeUnits="true"
@@ -39,6 +39,6 @@
     </coverage>
 
     <logging>
-        <text outputFile="tests/logfile.txt"/>
+        <text outputFile="tests/logs/logfile.txt"/>
     </logging>
 </phpunit>
