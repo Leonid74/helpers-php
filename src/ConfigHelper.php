@@ -27,13 +27,6 @@ namespace Leonid74\Helpers;
 class ConfigHelper
 {
     /**
-     * Config data
-     *
-     * @var array
-     */
-    protected static $aData = [];
-
-    /**
      * Argument used in file_parse_ini()
      *
      * @var boolean
@@ -48,6 +41,13 @@ class ConfigHelper
     public static $iniScannerMode = INI_SCANNER_TYPED;
 
     /**
+     * Config data
+     *
+     * @var array
+     */
+    protected static $aData = [];
+
+    /**
      * Load config file
      *
      * @param string $sPath Path to file
@@ -56,10 +56,9 @@ class ConfigHelper
      *
      * @return void
      */
-    public static function loadFile( string $sPath, ?bool $bPrefixFilename, ?string $sPrefixCustom ): void
+    public static function loadFile( string $sPath, ?bool $bPrefixFilename = false, ?string $sPrefixCustom = false ): void
     {
         $aPathinfo = \pathinfo( $sPath );
-        $bPrefixFilename = $bPrefixFilename ?? false;
 
         // Add prefix
         $sPrefix = $bPrefixFilename ? $aPathinfo['filename'] : null;
@@ -74,36 +73,6 @@ class ConfigHelper
     }
 
     /**
-     * Get file content as php array
-     *
-     * @param string $sPath Path to file
-     * @param array $aPathinfo pathinfo() array
-     *
-     * @return array
-     */
-    protected static function getFileContent( string $sPath, array $aPathinfo ): array
-    {
-        switch ( $aPathinfo['extension'] ) {
-            case 'php':
-                $aOptions = require( $sPath );
-                break;
-
-            case 'ini':
-                $aOptions = \parse_ini_file( $sPath, static::$iniProcessSections, static::$iniScannerMode );
-                break;
-
-            case 'json':
-                $aOptions = \json_decode( \file_get_contents( $sPath ), true );
-                break;
-
-            default:
-                throw new \Exception( 'Unsupported filetype: ' . $aPathinfo['extension'] );
-        }
-
-        return \is_array( $aOptions ) ? $aOptions : [];
-    }
-
-    /**
      * Load an array into the config
      *
      * @param array $aData Data to load.
@@ -111,7 +80,7 @@ class ConfigHelper
      *
      * @return void
      */
-    public static function loadArray( array $aData, ?string $sPrefix ): void
+    public static function loadArray( array $aData, ?string $sPrefix = null ): void
     {
         foreach ( $aData as $key => $val ) {
             if ( $sPrefix !== null ) {
@@ -120,27 +89,6 @@ class ConfigHelper
 
             static::set( $key, $val );
         }
-    }
-
-    /**
-     * Set the data to the config
-     *
-     * @param string $key Key name
-     * @param mixed $value Value
-     *
-     * @return void
-     */
-    protected static function set( string $key, $value ): void
-    {
-        if ( \is_array( $value ) ) {
-            foreach ( $value as $key2 => $val2 ) {
-                $key_path = $key . '.' . $key2;
-                static::set( $key_path, $val2 );
-            }
-        }
-
-        // Set
-        static::$aData[$key] = $value;
     }
 
     /**
@@ -188,5 +136,56 @@ class ConfigHelper
     public static function exists( string $key ): bool
     {
         return self::hasKey( $key );
+    }
+
+    /**
+     * Get file content as php array
+     *
+     * @param string $sPath Path to file
+     * @param array $aPathinfo pathinfo() array
+     *
+     * @return array
+     */
+    protected static function getFileContent( string $sPath, array $aPathinfo ): array
+    {
+        switch ( $aPathinfo['extension'] ) {
+            case 'php':
+                $aOptions = require( $sPath );
+                break;
+
+            case 'ini':
+                $aOptions = \parse_ini_file( $sPath, static::$iniProcessSections, static::$iniScannerMode );
+                break;
+
+            case 'json':
+                $aOptions = \json_decode( \file_get_contents( $sPath ), true );
+                break;
+
+            default:
+                throw new \Exception( 'Unsupported filetype: ' . $aPathinfo['extension'] );
+        }
+
+        return \is_array( $aOptions ) ? $aOptions : [];
+    }
+
+    /**
+     * Set the data to the config
+     *
+     * @param string $key Key name
+     * @param mixed $value Value
+     *
+     * @return void
+     */
+    protected static function set( string $key, $value ): void
+    {
+        if ( \is_array( $value ) ) {
+            foreach ( $value as $key2 => $val2 ) {
+                $key_path = $key . '.' . $key2;
+                static::set( $key_path, $val2 );
+            }
+        }
+
+        // Set
+        static::$aData[$key] = $value;
     }
 }
