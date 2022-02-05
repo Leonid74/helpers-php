@@ -56,7 +56,7 @@ class ConfigHelper
      *
      * @return void
      */
-    public static function loadFile( string $sPath, ?bool $bPrefixFilename = false, ?string $sPrefixCustom = false ): void
+    public static function loadFile( string $sPath, ?bool $bPrefixFilename = false, ?string $sPrefixCustom = null ): void
     {
         $aPathinfo = \pathinfo( $sPath );
 
