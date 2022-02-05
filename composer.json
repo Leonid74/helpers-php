@@ -3,15 +3,29 @@
     "type": "library",
     "description": "Helper classes for processing all types of data",
     "keywords": [
+        "helper",
+        "helper-class",
+        "helper-classes",
         "helpers",
-        "helpers-php"
+        "helpers-class",
+        "helpers-classes",
+        "config",
+        "config-class",
+        "string",
+        "string-class",
+        "array",
+        "array-class",
+        "file",
+        "file-class",
+        "url",
+        "url-class"
     ],
-    "homepage": "https://github.com/leonid74/helpers-php",
+    "homepage": "https://github.com/Leonid74/helpers-php",
     "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "leonid74",
-            "homepage": "https://github.com/leonid74/",
+            "homepage": "https://github.com/Leonid74/",
             "role": "Developer"
         }
     ],

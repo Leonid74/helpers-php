@@ -9,7 +9,7 @@
 # helpers-php
 ***Under active development.***
 
-Helper classes for processing all types of data
+Helper classes for processing all types of data (strings, arrays, files, urls, configs, etc.)
 
 Installation
 -----
