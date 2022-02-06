@@ -91,7 +91,7 @@ class PhoneHelper
                     \file_get_contents( "https://sms.ru/sms/cost?api_id={$apiToken}&to={$sString}&msg=" . \urlencode( 'Test' . \microtime( true ) ) . "&json=1" )
                 );
 
-                if ( \json_check_noerror() && $json ) {
+                if ( ( \json_last_error() === JSON_ERROR_NONE ) && $json ) {
                     if ( $json->status === "OK" ) {
                         foreach ( $json->sms as $data ) {
                             $oResult->is_error = false;
