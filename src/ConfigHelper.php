@@ -68,8 +68,8 @@ class ConfigHelper
         }
 
         // Load file content
-        $mixContent = static::getFileContent( $sPath, $aPathinfo );
-        static::loadArray( $mixContent, $sPrefix );
+        $mixContent = self::getFileContent( $sPath, $aPathinfo );
+        self::loadArray( $mixContent, $sPrefix );
     }
 
     /**
@@ -87,7 +87,7 @@ class ConfigHelper
                 $key = $sPrefix . '.' . $key;
             }
 
-            static::set( $key, $val );
+            self::set( $key, $val );
         }
     }
 
@@ -181,7 +181,7 @@ class ConfigHelper
         if ( \is_array( $value ) ) {
             foreach ( $value as $key2 => $val2 ) {
                 $key_path = $key . '.' . $key2;
-                static::set( $key_path, $val2 );
+                self::set( $key_path, $val2 );
             }
         }
 

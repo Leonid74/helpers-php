@@ -111,10 +111,10 @@ class PhoneHelper
                         $oResult->errors[] = $json->status_code . ': ' . $json->status_text;
                     }
                 } else {
-                    // The request was not executed (the connection with the server could not be established)
+                    // The request was not executed (Error decoding the response or Failed to establish connection with the server)
                     $oResult->phone_exists = 'unknown';
                     $oResult->is_error = true;
-                    $oResult->errors[] = 'Failed to establish connection with the server or error decoding the response';
+                    $oResult->errors[] = 'Error decoding the response or Failed to establish connection with the server';
                 }
 
                 \usleep( 500000 );
