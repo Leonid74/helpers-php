@@ -65,21 +65,15 @@ class PhoneHelper
      *
      * @return stdClass()
      */
-    public static function isPhoneExist( ?string $sString = '', ?string $apiToken = '' )
+    public static function isPhoneExist( string $sString, string $apiToken )
     {
         $oResult = new \stdClass();
         $oResult->phone = $sString;
         $oResult->phone_exists = 'unknown';
         $oResult->is_error = false;
 
-        if ( '' === $sString || \is_null( $sString ) ) {
+        if ( empty( $sString ) ) {
             $oResult->phone_exists = false;
-            return $oResult;
-        }
-
-        if ( '' === $apiToken || \is_null( $apiToken ) ) {
-            $oResult->is_error = true;
-            $oResult->errors[] = 'The API Token is not specified';
             return $oResult;
         }
 
