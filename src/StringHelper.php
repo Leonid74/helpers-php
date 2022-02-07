@@ -83,70 +83,110 @@ class StringHelper
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_strlen( string $string ): int
+    public static function mb_strlen( ?string $string = '' ): int
     {
+        if ( '' === $string || \is_null( $string ) ) {
+            return 0;
+        }
+
         return function_exists( 'mb_strlen' )
             ? \mb_strlen( $string, static::$encoding )
             : \strlen( $string );
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_strtolower( string $string ): string
+    public static function mb_strtolower( ?string $string = '' ): string
     {
+        if ( '' === $string || \is_null( $string ) ) {
+            return '';
+        }
+
         return function_exists( 'mb_strtolower' )
             ? \mb_strtolower( $string, static::$encoding )
             : \strtolower( $string );
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_strtoupper( string $string ): string
+    public static function mb_strtoupper( ?string $string = '' ): string
     {
+        if ( '' === $string || \is_null( $string ) ) {
+            return '';
+        }
+
         return function_exists( 'mb_strtoupper' )
             ? \mb_strtoupper( $string, static::$encoding )
             : \strtoupper( $string );
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_ucfirst( string $string ): string
+    public static function mb_ucfirst( ?string $string = '' ): string
     {
+        if ( '' === $string || \is_null( $string ) ) {
+            return '';
+        }
+
         return self::mb_strtoupper( self::mb_substr( $string, 0, 1 ) ) . self::mb_substr( $string, 1 );
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_convert_case( string $string ): string
+    public static function mb_convert_case( ?string $string = '' ): string
     {
+        if ( '' === $string || \is_null( $string ) ) {
+            return '';
+        }
+
         return function_exists( 'mb_convert_case' )
             ? \mb_convert_case( $string, MB_CASE_TITLE, static::$encoding )
             : \ucfirst( $string );
     }
 
     // @codingStandardsIgnoreLine
-    public static function htmlspecialchars( string $string ): string
+    public static function htmlspecialchars( ?string $string = '' ): string
     {
+        if ( '' === $string || \is_null( $string ) ) {
+            return '';
+        }
+
         return \htmlspecialchars( $string, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, static::$encoding );
     }
 
     // @codingStandardsIgnoreLine
-    public static function htmlspecialchars_decode( string $string ): string
+    public static function htmlspecialchars_decode( ?string $string = '' ): string
     {
+        if ( '' === $string || \is_null( $string ) ) {
+            return '';
+        }
+
         return \htmlspecialchars_decode( $string, ENT_COMPAT | ENT_HTML5 );
     }
 
     // @codingStandardsIgnoreLine
-    public static function htmlentities( string $string ): string
+    public static function htmlentities( ?string $string = '' ): string
     {
+        if ( '' === $string || \is_null( $string ) ) {
+            return '';
+        }
+
         return \htmlentities( $string, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, static::$encoding );
     }
 
     // @codingStandardsIgnoreLine
-    public static function html_entity_decode( string $string ): string
+    public static function html_entity_decode( ?string $string = '' ): string
     {
+        if ( '' === $string || \is_null( $string ) ) {
+            return '';
+        }
+
         return \html_entity_decode( $string, ENT_COMPAT | ENT_HTML5, static::$encoding );
     }
 
     // @codingStandardsIgnoreLine
-    public static function utf8_urldecode( string $string ): string
+    public static function utf8_urldecode( ?string $string = '' ): string
     {
+        if ( '' === $string || \is_null( $string ) ) {
+            return '';
+        }
+
         $string = \preg_replace( "/%u([0-9a-f]{3,4})/i", "&#x\\1;", \urldecode( $string ) );
         return self::html_entity_decode( $string );
     }
@@ -160,9 +200,13 @@ class StringHelper
      *
      * @return string
      */
-    public static function addBOM( ?string $sString = null ): string
+    public static function addBOM( ?string $sString = '' ): string
     {
-        return \chr( 0xEF ) . \chr( 0xBB ) . \chr( 0xBF ) . ( $sString ?? '' );
+        if ( '' === $sString || \is_null( $sString ) ) {
+            return '';
+        }
+
+        return \chr( 0xEF ) . \chr( 0xBB ) . \chr( 0xBF ) . $sString;
     }
 
     /**
@@ -197,7 +241,7 @@ class StringHelper
      *
      * @return string
      */
-    public static function truncateString( ?string $sString = '', int $iLength = 100, string $sSuffix = '...' ): string
+    public static function truncateString( ?string $sString = '', ?int $iLength = 100, ?string $sSuffix = '...' ): string
     {
         if ( '' === $sString || \is_null( $sString ) ) {
             return '';
@@ -233,5 +277,28 @@ class StringHelper
             \mt_rand( 0, 0xffff ),
             \mt_rand( 0, 0xffff )
         );
+    }
+
+    /**
+     * Gets a prefixed real unique identifier based on the cryptographically secure function if it possible.
+     *
+     * Получаем действительно уникальный идентификатор (с префиксом), основанный на криптографически безопасных функциях, если они доступны.
+     *
+     * @param int    $length length of the unique identifier
+     * @param string $prefix prefix of the unique identifier
+     *
+     * @return string
+     */
+    public static function generateUniqId( int $length = 5, string $prefix = '' ): string
+    {
+        if ( function_exists( 'random_bytes' ) ) {
+            $bytes = \random_bytes( (int) \ceil( $length / 2 ) );
+            return $prefix . \substr( \bin2hex( $bytes ), 0, $length );
+        } elseif ( function_exists( 'openssl_random_pseudo_bytes' ) ) {
+            $bytes = \openssl_random_pseudo_bytes( (int) \ceil( $length / 2 ) );
+            return $prefix . \substr( \bin2hex( $bytes ), 0, $length );
+        } else {
+            return \substr( \str_shuffle( '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' ), 0, $length );
+        }
     }
 }

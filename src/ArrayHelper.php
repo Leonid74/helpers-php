@@ -37,11 +37,9 @@ class ArrayHelper
     public static function arrayKeyExists(
         $mNeedle,
         array $aHaystack,
-        ?bool $bCaseInsensitive,
-        ?bool $bProcessSubarrays
+        ?bool $bCaseInsensitive = false,
+        ?bool $bProcessSubarrays = true
     ): bool {
-        $bCaseInsensitive = $bCaseInsensitive ?? false;
-        $bProcessSubarrays = $bProcessSubarrays ?? true;
         $result = false;
 
         if ( '' !== $mNeedle && !\is_null( $mNeedle ) ) {
@@ -81,13 +79,10 @@ class ArrayHelper
     public static function arrayValueExists(
         $mNeedle,
         array $aHaystack,
-        ?bool $bCaseInsensitive,
-        ?bool $bProcessSubarrays,
-        ?bool $bStrictTypes
+        ?bool $bCaseInsensitive = false,
+        ?bool $bProcessSubarrays = true,
+        ?bool $bStrictTypes = false
     ): bool {
-        $bCaseInsensitive = $bCaseInsensitive ?? false;
-        $bProcessSubarrays = $bProcessSubarrays ?? true;
-        $bStrictTypes = $bStrictTypes ?? false;
         $result = false;
 
         if ( '' !== $mNeedle && !\is_null( $mNeedle ) ) {
@@ -129,12 +124,9 @@ class ArrayHelper
     public static function arrayNeedlesExists(
         string $sHaystack,
         array $aNeedles,
-        ?int $iOffset,
-        ?bool $bCaseInSensitive
+        ?int $iOffset = 0,
+        ?bool $bCaseInSensitive = false
     ): bool {
-        $iOffset = $iOffset ?? 0;
-        $bCaseInsensitive = $bCaseInsensitive ?? false;
-
         foreach ( $aNeedles as $needle ) {
             if ( ( $bCaseInSensitive ? \stripos( $sHaystack, $needle, $iOffset ) : \strpos( $sHaystack, $needle, $iOffset ) ) !== false ) {
                 return true;
@@ -162,13 +154,10 @@ class ArrayHelper
     public static function arraySearch(
         $mNeedle,
         array $aHaystack,
-        ?bool $bCaseInsensitive,
-        ?bool $bProcessSubarrays,
-        ?bool $bStrictTypes
+        ?bool $bCaseInsensitive = false,
+        ?bool $bProcessSubarrays = true,
+        ?bool $bStrictTypes = false
     ) {
-        $bCaseInsensitive = $bCaseInsensitive ?? false;
-        $bProcessSubarrays = $bProcessSubarrays ?? true;
-        $bStrictTypes = $bStrictTypes ?? false;
         $result = false;
 
         if ( '' !== $mNeedle && !\is_null( $mNeedle ) ) {
@@ -217,11 +206,9 @@ class ArrayHelper
     public static function arrayStrPos(
         $mNeedle,
         array $aHaystack,
-        ?bool $bCaseInsensitive,
-        ?bool $bProcessSubarrays
+        ?bool $bCaseInsensitive = false,
+        ?bool $bProcessSubarrays = true
     ) {
-        $bCaseInsensitive = $bCaseInsensitive ?? false;
-        $bProcessSubarrays = $bProcessSubarrays ?? true;
         $result = false;
 
         if ( '' !== $mNeedle && !\is_null( $mNeedle ) ) {
