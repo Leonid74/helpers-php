@@ -25,15 +25,15 @@ class FileHelper
      *
      * @return string
      */
-    public static function getFileNameOnly( ?string $sFilename = '' ): string
+    public static function getFileNameOnly( ?string $sFilename = '', string $default = '' ): string
     {
         if ( '' === $sFilename || \is_null( $sFilename ) ) {
-            return '';
+            return $default;
         }
 
         $sParsed = \pathinfo( \trim( $sFilename ), PATHINFO_FILENAME );
 
-        return $sParsed ? $sParsed : '';
+        return $sParsed ? $sParsed : $default;
     }
 
     /**
@@ -43,14 +43,14 @@ class FileHelper
      *
      * @return string
      */
-    public static function getFileExtOnly( ?string $sFilename = '' ): string
+    public static function getFileExtOnly( ?string $sFilename = '', string $default = '' ): string
     {
         if ( '' === $sFilename || \is_null( $sFilename ) ) {
-            return '';
+            return $default;
         }
 
         $sParsed = \pathinfo( \trim( $sFilename ), PATHINFO_EXTENSION );
 
-        return $sParsed ? $sParsed : '';
+        return $sParsed ? $sParsed : $default;
     }
 }

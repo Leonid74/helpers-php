@@ -42,7 +42,7 @@ class ArrayHelper
     ): bool {
         $result = false;
 
-        if ( '' !== $mNeedle && !\is_null( $mNeedle ) ) {
+        if ( !empty( $mNeedle ) && !empty( $aHaystack ) ) {
             foreach ( $aHaystack as $key => $mItem ) {
                 $result = $bCaseInsensitive ? \mb_strtolower( $mNeedle ) == \mb_strtolower( $key ) : (string) $mNeedle == (string) $key;
 
@@ -85,7 +85,7 @@ class ArrayHelper
     ): bool {
         $result = false;
 
-        if ( '' !== $mNeedle && !\is_null( $mNeedle ) ) {
+        if ( !empty( $mNeedle ) && !empty( $aHaystack ) ) {
             foreach ( $aHaystack as $mItem ) {
                 if ( \is_array( $mItem ) ) {
                     if ( !$bProcessSubarrays ) {
@@ -127,9 +127,11 @@ class ArrayHelper
         ?int $iOffset = 0,
         ?bool $bCaseInSensitive = false
     ): bool {
-        foreach ( $aNeedles as $needle ) {
-            if ( ( $bCaseInSensitive ? \stripos( $sHaystack, $needle, $iOffset ) : \strpos( $sHaystack, $needle, $iOffset ) ) !== false ) {
-                return true;
+        if ( !empty( $aNeedles ) && !empty( $sHaystack ) ) {
+            foreach ( $aNeedles as $needle ) {
+                if ( ( $bCaseInSensitive ? \stripos( $sHaystack, $needle, $iOffset ) : \strpos( $sHaystack, $needle, $iOffset ) ) !== false ) {
+                    return true;
+                }
             }
         }
 
@@ -160,7 +162,7 @@ class ArrayHelper
     ) {
         $result = false;
 
-        if ( '' !== $mNeedle && !\is_null( $mNeedle ) ) {
+        if ( !empty( $mNeedle ) && !empty( $aHaystack ) ) {
             foreach ( $aHaystack as $key => $mItem ) {
                 if ( \is_array( $mItem ) ) {
                     if ( !$bProcessSubarrays ) {
@@ -211,7 +213,7 @@ class ArrayHelper
     ) {
         $result = false;
 
-        if ( '' !== $mNeedle && !\is_null( $mNeedle ) ) {
+        if ( !empty( $mNeedle ) && !empty( $aHaystack ) ) {
             foreach ( $aHaystack as $key => $mItem ) {
                 if ( \is_array( $mItem ) ) {
                     if ( !$bProcessSubarrays ) {
@@ -256,7 +258,7 @@ class ArrayHelper
         ?string $subseparator = '|',
         ?bool $isRecursion = false
     ): string {
-        if ( empty( $aHaystack ) || ( !\is_array( $aHaystack ) && !\is_object( $aHaystack ) ) ) {
+        if ( empty( $aHaystack ) ) {
             return $default;
         }
 
@@ -284,35 +286,86 @@ class ArrayHelper
      * @edit   Leonid Sheikman (leonid74)
      */
     public static function arrayFlattenMulti(
-        array $aHaystack,
-        $prefix = false
+        ?array $aHaystack = [],
+        bool $prefix = false
     ): array {
-        $return = [];
-        if ( \is_array( $aHaystack ) || \is_object( $aHaystack ) ) {
-            if ( empty( $aHaystack ) ) {
-                $return[$prefix] = '';
-            } else {
-                foreach ( $aHaystack as $key => $val ) {
-                    if ( \is_scalar( $val ) ) {
-                        if ( $prefix ) {
-                            $return[$prefix . '[' . $key . ']'] = $val;
-                        } else {
-                            $return[$key] = $val;
-                        }
-                    } else {
-                        $return = \array_merge(
-                            $return,
-                            self::arrayFlattenMulti(
-                                $val,
-                                $prefix ? $prefix . '[' . $key . ']' : $key
-                            )
-                        );
-                    }
-                }
-            }
-        } elseif ( $aHaystack === null ) {
-            $return[$prefix] = $aHaystack;
+        $aResult = [];
+
+        if ( $prefix && $aHaystack === null ) {
+            $aResult[$prefix] = null;
+
+            return $aResult;
         }
-        return $return;
+
+        if ( $prefix && empty( $aHaystack ) ) {
+            $aResult[$prefix] = '';
+
+            return $aResult;
+        }
+
+        if ( !empty( $aHaystack ) ) {
+            foreach ( $aHaystack as $key => $val ) {
+                if ( \is_scalar( $val ) ) {
+                    $aResult[ $prefix ? $prefix . '[' . $key . ']' : $key ] = $val;
+                    continue;
+                }
+                $aResult = \array_merge( $aResult, self::arrayFlattenMulti( $val, $prefix ? $prefix . '[' . $key . ']' : $key ) );
+            }
+        }
+
+        return $aResult;
+    }
+
+    /**
+     * Recursive call of the specified function to process an array with nested arrays.
+     *
+     * Рекурсивный вызов указанной функции для обработки массива со вложенными массивами.
+     *
+     * $_GET  = \Leonid74\Helpers\ArrayHelper::arrayMapRecursive('htmlspecialchars', $_GET);
+     * $_POST = \Leonid74\Helpers\ArrayHelper::arrayMapRecursive('trim', $_POST);.
+     *
+     * @param string $func
+     * @param array  $aHaystack
+     *
+     * @return array
+     */
+    public static function arrayMapRecursive(
+        string $func,
+        array $aHaystack = []
+    ): array {
+        if ( empty( $aHaystack ) ) {
+            return [];
+        }
+
+        $aResult = [];
+        foreach ( $aHaystack as $key => $value ) {
+            $aResult[$key] = ( \is_array( $value ) ? self::arrayMapRecursive( $func, $value ) : $func( $value ) );
+        }
+
+        return $aResult;
+    }
+
+    /**
+     * A faster way to replace the strings in multidimensional array.
+     *
+     * Более быстрый способ замены строк в многомерном массиве.
+     *
+     * @param array|string $search
+     * @param array|string $replace
+     * @param array $aHaystack
+     *
+     * @return array
+     *
+     * inspired by php.net
+     */
+    public static function arrayStrReplaceMulti(
+        $search,
+        $replace,
+        array $aHaystack = []
+    ): array {
+        if ( empty( $aHaystack ) ) {
+            return [];
+        }
+        return \json_decode( \str_replace( $search, $replace, \json_encode( $aHaystack, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) ), true );
     }
 }

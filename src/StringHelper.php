@@ -19,7 +19,8 @@ namespace Leonid74\Helpers;
 class StringHelper
 {
     /**
-     * Set the encoding by default
+     * Set the default encoding.
+     * Can be reassign like this: \Leonid74\Helpers\StringHelper::$encoding = 'Windows-1251';
      */
     public static $encoding = 'UTF-8';
 
@@ -280,9 +281,11 @@ class StringHelper
     }
 
     /**
-     * Gets a prefixed real unique identifier based on the cryptographically secure function if it possible.
+     * Gets a truly unique identifier (with a prefix) based on cryptographically secure
+     * functions, if available, otherwise a random ID is created
      *
-     * Получаем действительно уникальный идентификатор (с префиксом), основанный на криптографически безопасных функциях, если они доступны.
+     * Получаем действительно уникальный идентификатор (с префиксом), основанный на криптографически безопасных
+     * функциях, если они доступны, в противном случае создается случайный ID
      *
      * @param int    $length length of the unique identifier
      * @param string $prefix prefix of the unique identifier
