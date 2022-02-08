@@ -25,6 +25,13 @@ class StringHelper
     public static $encoding = 'UTF-8';
 
     /**
+     * Set the array of hiding data, using hidingData() function.
+     * Can be set like this: \Leonid74\Helpers\StringHelper::$aDataToHide[] = 'secret token';
+     *                       \Leonid74\Helpers\StringHelper::$aDataToHide[] = 'another confidentional data';
+     */
+    public static $aDataToHide = [];
+
+    /**
      * Most used common php functions.
      */
     // @codingStandardsIgnoreLine
@@ -229,6 +236,24 @@ class StringHelper
     }
 
     /**
+     * Replace <br> to \n.
+     *
+     * Замена <br> на \n.
+     *
+     * @param string $sString
+     *
+     * @return string
+     */
+    public static function br2nl( ?string $sString = '' ): string
+    {
+        if ( '' === $sString || \is_null( $sString ) ) {
+            return '';
+        }
+
+        return \preg_replace( '/\<br(\s*)?\/?\>/i', "\n", $sString );
+    }
+
+    /**
      * Truncates the string to the specified length with the specified suffix (optional).
      *
      * Усекает строку до указанной длины с указанным суффиксом (опционально).
@@ -303,5 +328,30 @@ class StringHelper
         } else {
             return \substr( \str_shuffle( '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' ), 0, $length );
         }
+    }
+
+    /**
+     * Hiding any data in the output information (ideal for a log).
+     *
+     * Скрытие любых данных в выводимой информации (идеально - для лога).
+     *
+     * @param mixed $data
+     * @param array $aDataToHide
+     *
+     * @return string
+     */
+    public static function hidingData( $data, array $aDataToHide = [] ): string
+    {
+        if ( empty( $data ) || ( empty( static::$aDataToHide ) && empty( $aDataToHide ) ) ) {
+            return $data;
+        }
+
+        $aDataToHide = empty( static::$aDataToHide )
+            ? $aDataToHide
+            : ( empty( $aDataToHide )
+                ? static::$aDataToHide
+                : \array_merge( static::$aDataToHide, $aDataToHide ) );
+
+        return \str_replace( $aDataToHide, '**hided**', \is_scalar( $data ) ? (string) $data : \var_export( $data, true ) );
     }
 }
