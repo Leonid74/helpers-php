@@ -372,6 +372,10 @@ class StringHelper
         }
 
         try {
+            if ( !preg_match( '/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $sString ) ) {
+                return false;
+            }
+
             $sDecoded = base64_decode( $sString, true );
             if ( false === $sDecoded ) {
                 return false;
