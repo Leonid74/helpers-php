@@ -354,4 +354,36 @@ class StringHelper
 
         return \str_replace( $aDataToHide, '**hided**', \is_scalar( $data ) ? (string) $data : \var_export( $data, true ) );
     }
+
+    /**
+     * Checking whether a string is encoded in Base64 format
+     *
+     * Проверка, закодирована ли строка в формате Base64
+     *
+     * @param string $data
+     * @param array $enc
+     *
+     * @return bool
+     */
+    public static function isBase64Encoded( ?string $sString = '', ?array $enc = ['UTF-8', 'ASCII'] ): bool
+    {
+        if ( '' === $sString || \is_null( $sString ) ) {
+            return false;
+        }
+
+        try {
+            $sDecoded = base64_decode( $sString, true );
+            if ( false === $sDecoded ) {
+                return false;
+            }
+
+            if ( !in_array( mb_detect_encoding( $sDecoded, null, true ), $enc ) ) {
+                return false;
+            }
+        } catch ( \Exception $e ) {
+            return false;
+        }
+
+        return true;
+    }
 }
