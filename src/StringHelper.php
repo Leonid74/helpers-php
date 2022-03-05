@@ -91,6 +91,22 @@ class StringHelper
     }
 
     // @codingStandardsIgnoreLine
+    public static function mb_substr_replace( string $string, string $replacement, int $start, int $length = null ): string
+    {
+        if ( \is_null( $length ) ) {
+            return static::mb_substr( $string, 0, $start ) . $replacement;
+        }
+
+        if ( $length < 0 ) {
+            $length = static::mb_strlen( $string ) - $start + $length;
+        }
+
+        return static::mb_substr( $string, 0, $start ) .
+            $replacement .
+            static::mb_substr( $string, $start + $length, static::mb_strlen( $string ) );
+    }
+
+    // @codingStandardsIgnoreLine
     public static function mb_strlen( ?string $string = '' ): int
     {
         if ( '' === $string || \is_null( $string ) ) {
@@ -340,6 +356,7 @@ class StringHelper
      *
      * @return string
      */
+    // @codingStandardsIgnoreLine
     public static function hidingData( $data = null, array $aDataToHide = [] ): string
     {
         if ( empty( $data ) || ( empty( static::$aDataToHide ) && empty( $aDataToHide ) ) ) {
