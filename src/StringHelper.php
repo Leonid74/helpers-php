@@ -340,7 +340,7 @@ class StringHelper
      *
      * @return string
      */
-    public static function hidingData( $data, array $aDataToHide = [] ): string
+    public static function hidingData( $data = null, array $aDataToHide = [] ): string
     {
         if ( empty( $data ) || ( empty( static::$aDataToHide ) && empty( $aDataToHide ) ) ) {
             return $data;
