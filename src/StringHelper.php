@@ -407,4 +407,22 @@ class StringHelper
 
         return true;
     }
+
+    /**
+     * Return transliterated string (with á é ò etc.) to string contain proper LATIN characters only
+     *
+     * @param string $sString
+     *
+     * @return string
+     *
+     * @author Leonid Sheikman <leonid@sheikman.ru>
+     */
+    public static function toLatinString( ?string $sString = '' ): string
+    {
+        if ( '' === $sString || \is_null( $sString ) ) {
+            return '';
+        }
+
+        return transliterator_transliterate( 'Any-Latin; Latin-ASCII; [\u0180-\u7fff] remove', $sString );
+    }
 }
