@@ -409,13 +409,13 @@ class StringHelper
     }
 
     /**
-     * Return transliterated string (with á é ò etc.) to string contain proper LATIN characters only
+     * Returns a transliterated string (originally containing á é ò characters, etc.) containing only Latin characters
+     *
+     * Возвращает транслитерированную строку (исходно содержащую символы á é ò и т.п.), содержащую только латинские символы
      *
      * @param string $sString
      *
      * @return string
-     *
-     * @author Leonid Sheikman <leonid@sheikman.ru>
      */
     public static function toLatinString( ?string $sString = '' ): string
     {
@@ -424,5 +424,34 @@ class StringHelper
         }
 
         return transliterator_transliterate( 'Any-Latin; Latin-ASCII; [\u0180-\u7fff] remove', $sString );
+    }
+
+    /**
+     * Minimal string cleaning:
+     * - service characters, tabs and line breaks are removed
+     * - double spaces are replaced by one
+     * - removes spaces at the beginning and end of the line
+     *
+     * Минимальная очистка строки:
+     *  - удаляются служебные символы, табуляция и переносы строк
+     *  - двойные пробелы заменяются на один
+     *  - удаляются пробелы в начале и конце строки
+     *
+     * @param string $sString
+     * @param string $sDefault
+     *
+     * @return string
+     */
+    public static function cleanMin( ?string $sString = '', ?string $sDefault = '' ): string
+    {
+        if ( '' === $sString || \is_null( $sString ) ) {
+            return '';
+        }
+
+        $sString = str_ireplace( ["\0", '\\a', '\\b', "\v", "\e", "\f", "\t", "\r", "\n"], ' ', $sString );
+        $sString = preg_replace( '/[\s]{2,}/', ' ', $sString );
+        $sString = trim( $sString );
+
+        return ( 0 == mb_strlen( $sString, 'UTF-8' ) ) ? $sDefault : $sString;
     }
 }
