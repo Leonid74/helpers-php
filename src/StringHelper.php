@@ -119,10 +119,10 @@ class StringHelper
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_strtolower( ?string $string = '' ): string
+    public static function mb_strtolower( ?string $string = '', ?string $sDefault = '' ): string
     {
         if ( '' === $string || \is_null( $string ) ) {
-            return '';
+            return $sDefault;
         }
 
         return function_exists( 'mb_strtolower' )
@@ -131,10 +131,10 @@ class StringHelper
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_strtoupper( ?string $string = '' ): string
+    public static function mb_strtoupper( ?string $string = '', ?string $sDefault = '' ): string
     {
         if ( '' === $string || \is_null( $string ) ) {
-            return '';
+            return $sDefault;
         }
 
         return function_exists( 'mb_strtoupper' )
@@ -143,20 +143,20 @@ class StringHelper
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_ucfirst( ?string $string = '' ): string
+    public static function mb_ucfirst( ?string $string = '', ?string $sDefault = '' ): string
     {
         if ( '' === $string || \is_null( $string ) ) {
-            return '';
+            return $sDefault;
         }
 
         return self::mb_strtoupper( self::mb_substr( $string, 0, 1 ) ) . self::mb_substr( $string, 1 );
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_convert_case( ?string $string = '' ): string
+    public static function mb_convert_case( ?string $string = '', ?string $sDefault = '' ): string
     {
         if ( '' === $string || \is_null( $string ) ) {
-            return '';
+            return $sDefault;
         }
 
         return function_exists( 'mb_convert_case' )
@@ -165,50 +165,50 @@ class StringHelper
     }
 
     // @codingStandardsIgnoreLine
-    public static function htmlspecialchars( ?string $string = '' ): string
+    public static function htmlspecialchars( ?string $string = '', ?string $sDefault = '' ): string
     {
         if ( '' === $string || \is_null( $string ) ) {
-            return '';
+            return $sDefault;
         }
 
         return \htmlspecialchars( $string, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, static::$encoding );
     }
 
     // @codingStandardsIgnoreLine
-    public static function htmlspecialchars_decode( ?string $string = '' ): string
+    public static function htmlspecialchars_decode( ?string $string = '', ?string $sDefault = '' ): string
     {
         if ( '' === $string || \is_null( $string ) ) {
-            return '';
+            return $sDefault;
         }
 
         return \htmlspecialchars_decode( $string, ENT_COMPAT | ENT_HTML5 );
     }
 
     // @codingStandardsIgnoreLine
-    public static function htmlentities( ?string $string = '' ): string
+    public static function htmlentities( ?string $string = '', ?string $sDefault = '' ): string
     {
         if ( '' === $string || \is_null( $string ) ) {
-            return '';
+            return $sDefault;
         }
 
         return \htmlentities( $string, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, static::$encoding );
     }
 
     // @codingStandardsIgnoreLine
-    public static function html_entity_decode( ?string $string = '' ): string
+    public static function html_entity_decode( ?string $string = '', ?string $sDefault = '' ): string
     {
         if ( '' === $string || \is_null( $string ) ) {
-            return '';
+            return $sDefault;
         }
 
         return \html_entity_decode( $string, ENT_COMPAT | ENT_HTML5, static::$encoding );
     }
 
     // @codingStandardsIgnoreLine
-    public static function utf8_urldecode( ?string $string = '' ): string
+    public static function utf8_urldecode( ?string $string = '', ?string $sDefault = '' ): string
     {
         if ( '' === $string || \is_null( $string ) ) {
-            return '';
+            return $sDefault;
         }
 
         $string = \preg_replace( "/%u([0-9a-f]{3,4})/i", "&#x\\1;", \urldecode( $string ) );
@@ -221,13 +221,14 @@ class StringHelper
      * Добавление BOM в начало строки
      *
      * @param string $sString
+     * @param string $sDefault
      *
      * @return string
      */
-    public static function addBOM( ?string $sString = '' ): string
+    public static function addBOM( ?string $sString = '', ?string $sDefault = '' ): string
     {
         if ( '' === $sString || \is_null( $sString ) ) {
-            return '';
+            return $sDefault;
         }
 
         return \chr( 0xEF ) . \chr( 0xBB ) . \chr( 0xBF ) . $sString;
@@ -239,13 +240,14 @@ class StringHelper
      * Удаление BOM из начала строки
      *
      * @param string $sString
+     * @param string $sDefault
      *
      * @return string
      */
-    public static function removeBOM( ?string $sString = '' ): string
+    public static function removeBOM( ?string $sString = '', ?string $sDefault = '' ): string
     {
         if ( '' === $sString || \is_null( $sString ) ) {
-            return '';
+            return $sDefault;
         }
 
         return 0 === \strncasecmp( \pack( 'CCC', 0xef, 0xbb, 0xbf ), $sString, 3 ) ? \mb_substr( $sString, 3 ) : $sString;
@@ -257,13 +259,14 @@ class StringHelper
      * Замена <br> на \n.
      *
      * @param string $sString
+     * @param string $sDefault
      *
      * @return string
      */
-    public static function br2nl( ?string $sString = '' ): string
+    public static function br2nl( ?string $sString = '', ?string $sDefault = '' ): string
     {
         if ( '' === $sString || \is_null( $sString ) ) {
-            return '';
+            return $sDefault;
         }
 
         return \preg_replace( '/\<br(\s*)?\/?\>/i', "\n", $sString );
@@ -280,13 +283,14 @@ class StringHelper
      * @param string $sString
      * @param int    $iLength (defaults to 100)
      * @param string $sSuffix (optional, defaults to '...')
+     * @param string $sDefault
      *
      * @return string
      */
-    public static function truncateString( ?string $sString = '', ?int $iLength = 100, ?string $sSuffix = '...' ): string
+    public static function truncateString( ?string $sString = '', ?int $iLength = 100, ?string $sSuffix = '...', ?string $sDefault = '' ): string
     {
         if ( '' === $sString || \is_null( $sString ) ) {
-            return '';
+            return $sDefault;
         }
 
         if ( $iLength <= 0 || \mb_strlen( $sString ) <= $iLength ) {
@@ -414,13 +418,14 @@ class StringHelper
      * Возвращает транслитерированную строку (исходно содержащую символы á é ò и т.п.), содержащую только латинские символы
      *
      * @param string $sString
+     * @param string $sDefault
      *
      * @return string
      */
-    public static function toLatinString( ?string $sString = '' ): string
+    public static function toLatinString( ?string $sString = '', ?string $sDefault = '' ): string
     {
         if ( '' === $sString || \is_null( $sString ) ) {
-            return '';
+            return $sDefault;
         }
 
         return transliterator_transliterate( 'Any-Latin; Latin-ASCII; [\u0180-\u7fff] remove', $sString );
@@ -445,13 +450,13 @@ class StringHelper
     public static function minClean( ?string $sString = '', ?string $sDefault = '' ): string
     {
         if ( '' === $sString || \is_null( $sString ) ) {
-            return '';
+            return $sDefault;
         }
 
-        $sString = str_ireplace( ["\0", '\\a', '\\b', "\v", "\e", "\f", "\t", "\r", "\n"], ' ', $sString );
-        $sString = preg_replace( '/[\s]{2,}/', ' ', $sString );
-        $sString = trim( $sString );
+        $sString = \str_ireplace( ["\0", '\\a', '\\b', "\v", "\e", "\f", "\t", "\r", "\n"], ' ', $sString );
+        $sString = \preg_replace( '/[\s]{2,}/', ' ', $sString );
+        $sString = \trim( $sString );
 
-        return ( 0 == mb_strlen( $sString, 'UTF-8' ) ) ? $sDefault : $sString;
+        return ( 0 == \mb_strlen( $sString, 'UTF-8' ) ) ? $sDefault : $sString;
     }
 }
