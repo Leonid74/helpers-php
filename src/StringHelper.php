@@ -442,7 +442,7 @@ class StringHelper
      *
      * @return string
      */
-    public static function cleanMin( ?string $sString = '', ?string $sDefault = '' ): string
+    public static function minClean( ?string $sString = '', ?string $sDefault = '' ): string
     {
         if ( '' === $sString || \is_null( $sString ) ) {
             return '';
