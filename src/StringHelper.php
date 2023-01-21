@@ -457,6 +457,6 @@ class StringHelper
         $sString = \preg_replace( '/[\s]{2,}/', ' ', $sString );
         $sString = \trim( $sString );
 
-        return ( 0 == \mb_strlen( $sString, 'UTF-8' ) ) ? $sDefault : $sString;
+        return ( 0 == \mb_strlen( $sString, static::$encoding ) ) ? $sDefault : $sString;
     }
 }
