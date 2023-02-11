@@ -459,4 +459,34 @@ class StringHelper
 
         return ( 0 == \mb_strlen( $sString, static::$encoding ) ) ? $sDefault : $sString;
     }
+
+    /**
+     * Formatted print of variable
+     *
+     * Форматированный вывод переменной
+     *
+     * @param $mixVar Переменная для вывода
+     *
+     * @return void
+     */
+    public static function printVar( $mixVar = '' ): void
+    {
+        if ( '' === $mixVar || \is_null( $mixVar ) ) {
+            return;
+        }
+
+        // read backtrace
+        $bt = \debug_backtrace();
+        // read file
+        $file = \file( $bt[0]['file'] );
+        // select exact print_var_name($varname) line
+        $src = $file[$bt[0]['line'] - 1];
+        // search pattern
+        $pat = '#(.*)' . __FUNCTION__ . ' *?\( *?(.*) *?\)(.*)#i';
+        // extract $varname from match no 2
+        $var = \preg_replace( $pat, '$2', $src );
+        // print to browser
+        // @codingStandardsIgnoreLine
+        echo '<pre>' . \trim( $var ) . ' = ' . \print_r( \current( \func_get_args() ), true ) . '</pre>';
+    }
 }
