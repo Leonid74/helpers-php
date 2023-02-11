@@ -470,12 +470,8 @@ class StringHelper
      * @return void
      */
     // @codingStandardsIgnoreLine
-    public static function printVar( $mixVar = '' ): void
+    public static function printVar( $mixVar ): void
     {
-        if ( '' === $mixVar || \is_null( $mixVar ) ) {
-            return;
-        }
-
         // read backtrace
         $bt = \debug_backtrace();
         // read file
