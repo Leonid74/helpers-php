@@ -482,9 +482,12 @@ class StringHelper
         // search pattern
         $pat = '#(.*)' . __FUNCTION__ . ' *?\( *?(.*) *?\)(.*)#i';
         // extract $varname from match no 2
-        $var = \preg_replace( $pat, '$2', $src );
+        $var = \trim( \preg_replace( $pat, '$2', $src ) );
         // print to browser
+        if ( !empty( $sTitle ) ) {
+            $var = $sTitle . ': ' . \str_replace( ", '" . $sTitle . "'", '', $var );
+        }
         // @codingStandardsIgnoreLine
-        echo '<pre>' . ( empty( \trim( $sTitle ) ) ? '' : \trim( $sTitle ) . ': ' ) . \trim( $var ) . ' = ' . \print_r( \current( \func_get_args() ), true ) . '</pre>';
+        echo '<pre>' . $var . ' = ' . \print_r( \current( \func_get_args() ), true ) . '</pre>';
     }
 }
