@@ -466,11 +466,12 @@ class StringHelper
      * Форматированный вывод переменной
      *
      * @param $mixVar Переменная для вывода
+     * @param $sTitle Заголовок перед выводом переменной
      *
      * @return void
      */
     // @codingStandardsIgnoreLine
-    public static function printVar( $mixVar ): void
+    public static function printVar( $mixVar, string $sTitle = '' ): void
     {
         // read backtrace
         $bt = \debug_backtrace();
@@ -484,6 +485,6 @@ class StringHelper
         $var = \preg_replace( $pat, '$2', $src );
         // print to browser
         // @codingStandardsIgnoreLine
-        echo '<pre>' . \trim( $var ) . ' = ' . \print_r( \current( \func_get_args() ), true ) . '</pre>';
+        echo '<pre>' . ( empty( \trim( $sTitle ) ) ? '' : \trim( $sTitle ) . ': ' ) . \trim( $var ) . ' = ' . \print_r( \current( \func_get_args() ), true ) . '</pre>';
     }
 }
