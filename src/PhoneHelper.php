@@ -27,7 +27,7 @@ class PhoneHelper
      *
      * @return string|null A formatted phone number starting with +7, or null if the number is invalid.
      */
-    private function formatRussianMobilePhoneNumber(?string $phoneNumber): ?string
+    public static function formatRussianMobilePhoneNumber(?string $phoneNumber): ?string
     {
         if (empty($phoneNumber)) {
             return null;
