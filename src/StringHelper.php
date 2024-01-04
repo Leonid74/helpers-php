@@ -35,184 +35,184 @@ class StringHelper
      * Most used common php functions.
      */
     // @codingStandardsIgnoreLine
-    public static function mb_stristr( string $haystack, string $needle, bool $before_needle = false )
+    public static function mb_stristr(string $haystack, string $needle, bool $before_needle = false)
     {
-        return function_exists( 'mb_stristr' )
-            ? \mb_stristr( $haystack, $needle, $before_needle, static::$encoding )
-            : \stristr( $haystack, $needle, $before_needle );
+        return function_exists('mb_stristr')
+            ? \mb_stristr($haystack, $needle, $before_needle, static::$encoding)
+            : \stristr($haystack, $needle, $before_needle);
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_strstr( string $haystack, string $needle, bool $before_needle = false )
+    public static function mb_strstr(string $haystack, string $needle, bool $before_needle = false)
     {
-        return function_exists( 'mb_strstr' )
-            ? \mb_strstr( $haystack, $needle, $before_needle, static::$encoding )
-            : \strstr( $haystack, $needle, $before_needle );
+        return function_exists('mb_strstr')
+            ? \mb_strstr($haystack, $needle, $before_needle, static::$encoding)
+            : \strstr($haystack, $needle, $before_needle);
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_stripos( string $haystack, string $needle, int $start = 0 )
+    public static function mb_stripos(string $haystack, string $needle, int $start = 0)
     {
-        return function_exists( 'mb_stripos' )
-            ? \mb_stripos( $haystack, $needle, $start, static::$encoding )
-            : \stripos( $haystack, $needle, $start );
+        return function_exists('mb_stripos')
+            ? \mb_stripos($haystack, $needle, $start, static::$encoding)
+            : \stripos($haystack, $needle, $start);
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_strripos( string $haystack, string $needle, int $start = 0 )
+    public static function mb_strripos(string $haystack, string $needle, int $start = 0)
     {
-        return function_exists( 'mb_strripos' )
-            ? \mb_strripos( $haystack, $needle, $start, static::$encoding )
-            : \strripos( $haystack, $needle, $start );
+        return function_exists('mb_strripos')
+            ? \mb_strripos($haystack, $needle, $start, static::$encoding)
+            : \strripos($haystack, $needle, $start);
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_strpos( string $haystack, string $needle, int $start = 0 )
+    public static function mb_strpos(string $haystack, string $needle, int $start = 0)
     {
-        return function_exists( 'mb_strpos' )
-            ? \mb_strpos( $haystack, $needle, $start, static::$encoding )
-            : \strpos( $haystack, $needle, $start );
+        return function_exists('mb_strpos')
+            ? \mb_strpos($haystack, $needle, $start, static::$encoding)
+            : \strpos($haystack, $needle, $start);
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_strrpos( string $haystack, string $needle, int $start = 0 )
+    public static function mb_strrpos(string $haystack, string $needle, int $start = 0)
     {
-        return function_exists( 'mb_strrpos' )
-            ? \mb_strrpos( $haystack, $needle, $start, static::$encoding )
-            : \strrpos( $haystack, $needle, $start );
+        return function_exists('mb_strrpos')
+            ? \mb_strrpos($haystack, $needle, $start, static::$encoding)
+            : \strrpos($haystack, $needle, $start);
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_substr( string $string, int $start, int $length = null ): string
+    public static function mb_substr(string $string, int $start, int $length = null): string
     {
-        return function_exists( 'mb_substr' )
-            ? \mb_substr( $string, $start, $length, static::$encoding )
-            : \substr( $string, $start, $length );
+        return function_exists('mb_substr')
+            ? \mb_substr($string, $start, $length, static::$encoding)
+            : \substr($string, $start, $length);
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_substr_replace( string $string, string $replacement, int $start, int $length = null ): string
+    public static function mb_substr_replace(string $string, string $replacement, int $start, int $length = null): string
     {
-        if ( \is_null( $length ) ) {
-            return static::mb_substr( $string, 0, $start ) . $replacement;
+        if (\is_null($length)) {
+            return static::mb_substr($string, 0, $start) . $replacement;
         }
 
-        if ( $length < 0 ) {
-            $length = static::mb_strlen( $string ) - $start + $length;
+        if ($length < 0) {
+            $length = static::mb_strlen($string) - $start + $length;
         }
 
-        return static::mb_substr( $string, 0, $start ) .
+        return static::mb_substr($string, 0, $start) .
             $replacement .
-            static::mb_substr( $string, $start + $length, static::mb_strlen( $string ) );
+            static::mb_substr($string, $start + $length, static::mb_strlen($string));
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_strlen( ?string $string = '' ): int
+    public static function mb_strlen(?string $string = ''): int
     {
-        if ( '' === $string || \is_null( $string ) ) {
+        if ('' === $string || \is_null($string)) {
             return 0;
         }
 
-        return function_exists( 'mb_strlen' )
-            ? \mb_strlen( $string, static::$encoding )
-            : \strlen( $string );
+        return function_exists('mb_strlen')
+            ? \mb_strlen($string, static::$encoding)
+            : \strlen($string);
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_strtolower( ?string $string = '', ?string $sDefault = '' ): string
+    public static function mb_strtolower(?string $string = '', ?string $sDefault = ''): string
     {
-        if ( '' === $string || \is_null( $string ) ) {
+        if ('' === $string || \is_null($string)) {
             return $sDefault;
         }
 
-        return function_exists( 'mb_strtolower' )
-            ? \mb_strtolower( $string, static::$encoding )
-            : \strtolower( $string );
+        return function_exists('mb_strtolower')
+            ? \mb_strtolower($string, static::$encoding)
+            : \strtolower($string);
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_strtoupper( ?string $string = '', ?string $sDefault = '' ): string
+    public static function mb_strtoupper(?string $string = '', ?string $sDefault = ''): string
     {
-        if ( '' === $string || \is_null( $string ) ) {
+        if ('' === $string || \is_null($string)) {
             return $sDefault;
         }
 
-        return function_exists( 'mb_strtoupper' )
-            ? \mb_strtoupper( $string, static::$encoding )
-            : \strtoupper( $string );
+        return function_exists('mb_strtoupper')
+            ? \mb_strtoupper($string, static::$encoding)
+            : \strtoupper($string);
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_ucfirst( ?string $string = '', ?string $sDefault = '' ): string
+    public static function mb_ucfirst(?string $string = '', ?string $sDefault = ''): string
     {
-        if ( '' === $string || \is_null( $string ) ) {
+        if ('' === $string || \is_null($string)) {
             return $sDefault;
         }
 
-        return self::mb_strtoupper( self::mb_substr( $string, 0, 1 ) ) . self::mb_substr( $string, 1 );
+        return self::mb_strtoupper(self::mb_substr($string, 0, 1)) . self::mb_substr($string, 1);
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_convert_case( ?string $string = '', ?string $sDefault = '' ): string
+    public static function mb_convert_case(?string $string = '', ?string $sDefault = ''): string
     {
-        if ( '' === $string || \is_null( $string ) ) {
+        if ('' === $string || \is_null($string)) {
             return $sDefault;
         }
 
-        return function_exists( 'mb_convert_case' )
-            ? \mb_convert_case( $string, MB_CASE_TITLE, static::$encoding )
-            : \ucfirst( $string );
+        return function_exists('mb_convert_case')
+            ? \mb_convert_case($string, MB_CASE_TITLE, static::$encoding)
+            : \ucfirst($string);
     }
 
     // @codingStandardsIgnoreLine
-    public static function htmlspecialchars( ?string $string = '', ?string $sDefault = '' ): string
+    public static function htmlspecialchars(?string $string = '', ?string $sDefault = ''): string
     {
-        if ( '' === $string || \is_null( $string ) ) {
+        if ('' === $string || \is_null($string)) {
             return $sDefault;
         }
 
-        return \htmlspecialchars( $string, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, static::$encoding );
+        return \htmlspecialchars($string, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, static::$encoding);
     }
 
     // @codingStandardsIgnoreLine
-    public static function htmlspecialchars_decode( ?string $string = '', ?string $sDefault = '' ): string
+    public static function htmlspecialchars_decode(?string $string = '', ?string $sDefault = ''): string
     {
-        if ( '' === $string || \is_null( $string ) ) {
+        if ('' === $string || \is_null($string)) {
             return $sDefault;
         }
 
-        return \htmlspecialchars_decode( $string, ENT_COMPAT | ENT_HTML5 );
+        return \htmlspecialchars_decode($string, ENT_COMPAT | ENT_HTML5);
     }
 
     // @codingStandardsIgnoreLine
-    public static function htmlentities( ?string $string = '', ?string $sDefault = '' ): string
+    public static function htmlentities(?string $string = '', ?string $sDefault = ''): string
     {
-        if ( '' === $string || \is_null( $string ) ) {
+        if ('' === $string || \is_null($string)) {
             return $sDefault;
         }
 
-        return \htmlentities( $string, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, static::$encoding );
+        return \htmlentities($string, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, static::$encoding);
     }
 
     // @codingStandardsIgnoreLine
-    public static function html_entity_decode( ?string $string = '', ?string $sDefault = '' ): string
+    public static function html_entity_decode(?string $string = '', ?string $sDefault = ''): string
     {
-        if ( '' === $string || \is_null( $string ) ) {
+        if ('' === $string || \is_null($string)) {
             return $sDefault;
         }
 
-        return \html_entity_decode( $string, ENT_COMPAT | ENT_HTML5, static::$encoding );
+        return \html_entity_decode($string, ENT_COMPAT | ENT_HTML5, static::$encoding);
     }
 
     // @codingStandardsIgnoreLine
-    public static function utf8_urldecode( ?string $string = '', ?string $sDefault = '' ): string
+    public static function utf8_urldecode(?string $string = '', ?string $sDefault = ''): string
     {
-        if ( '' === $string || \is_null( $string ) ) {
+        if ('' === $string || \is_null($string)) {
             return $sDefault;
         }
 
-        $string = \preg_replace( "/%u([0-9a-f]{3,4})/i", "&#x\\1;", \urldecode( $string ) );
-        return self::html_entity_decode( $string );
+        $string = \preg_replace("/%u([0-9a-f]{3,4})/i", "&#x\\1;", \urldecode($string));
+        return self::html_entity_decode($string);
     }
 
     /**
@@ -225,13 +225,13 @@ class StringHelper
      *
      * @return string
      */
-    public static function addBOM( ?string $sString = '', ?string $sDefault = '' ): string
+    public static function addBOM(?string $sString = '', ?string $sDefault = ''): string
     {
-        if ( '' === $sString || \is_null( $sString ) ) {
+        if ('' === $sString || \is_null($sString)) {
             return $sDefault;
         }
 
-        return \chr( 0xEF ) . \chr( 0xBB ) . \chr( 0xBF ) . $sString;
+        return \chr(0xEF) . \chr(0xBB) . \chr(0xBF) . $sString;
     }
 
     /**
@@ -244,13 +244,13 @@ class StringHelper
      *
      * @return string
      */
-    public static function removeBOM( ?string $sString = '', ?string $sDefault = '' ): string
+    public static function removeBOM(?string $sString = '', ?string $sDefault = ''): string
     {
-        if ( '' === $sString || \is_null( $sString ) ) {
+        if ('' === $sString || \is_null($sString)) {
             return $sDefault;
         }
 
-        return 0 === \strncasecmp( \pack( 'CCC', 0xef, 0xbb, 0xbf ), $sString, 3 ) ? \mb_substr( $sString, 3 ) : $sString;
+        return 0 === \strncasecmp(\pack('CCC', 0xef, 0xbb, 0xbf), $sString, 3) ? \mb_substr($sString, 3) : $sString;
     }
 
     /**
@@ -263,13 +263,13 @@ class StringHelper
      *
      * @return string
      */
-    public static function br2nl( ?string $sString = '', ?string $sDefault = '' ): string
+    public static function br2nl(?string $sString = '', ?string $sDefault = ''): string
     {
-        if ( '' === $sString || \is_null( $sString ) ) {
+        if ('' === $sString || \is_null($sString)) {
             return $sDefault;
         }
 
-        return \preg_replace( '/\<br(\s*)?\/?\>/i', "\n", $sString );
+        return \preg_replace('/\<br(\s*)?\/?\>/i', "\n", $sString);
     }
 
     /**
@@ -287,17 +287,17 @@ class StringHelper
      *
      * @return string
      */
-    public static function truncateString( ?string $sString = '', ?int $iLength = 100, ?string $sSuffix = '...', ?string $sDefault = '' ): string
+    public static function truncateString(?string $sString = '', ?int $iLength = 100, ?string $sSuffix = '...', ?string $sDefault = ''): string
     {
-        if ( '' === $sString || \is_null( $sString ) ) {
+        if ('' === $sString || \is_null($sString)) {
             return $sDefault;
         }
 
-        if ( $iLength <= 0 || \mb_strlen( $sString ) <= $iLength ) {
+        if ($iLength <= 0 || \mb_strlen($sString) <= $iLength) {
             return $sString;
         }
 
-        return \mb_substr( $sString, 0, $iLength - \mb_strlen( $sSuffix ) ) . $sSuffix;
+        return \mb_substr($sString, 0, $iLength - \mb_strlen($sSuffix)) . $sSuffix;
     }
 
     /**
@@ -314,14 +314,14 @@ class StringHelper
     {
         return \sprintf(
             '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            \mt_rand( 0, 0xffff ),
-            \mt_rand( 0, 0xffff ),
-            \mt_rand( 0, 0xffff ),
-            \mt_rand( 0, 0x0fff ) | 0x4000,
-            \mt_rand( 0, 0x3fff ) | 0x8000,
-            \mt_rand( 0, 0xffff ),
-            \mt_rand( 0, 0xffff ),
-            \mt_rand( 0, 0xffff )
+            \mt_rand(0, 0xffff),
+            \mt_rand(0, 0xffff),
+            \mt_rand(0, 0xffff),
+            \mt_rand(0, 0x0fff) | 0x4000,
+            \mt_rand(0, 0x3fff) | 0x8000,
+            \mt_rand(0, 0xffff),
+            \mt_rand(0, 0xffff),
+            \mt_rand(0, 0xffff)
         );
     }
 
@@ -337,16 +337,16 @@ class StringHelper
      *
      * @return string
      */
-    public static function generateUniqId( int $length = 5, string $prefix = '' ): string
+    public static function generateUniqId(int $length = 5, string $prefix = ''): string
     {
-        if ( function_exists( 'random_bytes' ) ) {
-            $bytes = \random_bytes( (int) \ceil( $length / 2 ) );
-            return $prefix . \substr( \bin2hex( $bytes ), 0, $length );
-        } elseif ( function_exists( 'openssl_random_pseudo_bytes' ) ) {
-            $bytes = \openssl_random_pseudo_bytes( (int) \ceil( $length / 2 ) );
-            return $prefix . \substr( \bin2hex( $bytes ), 0, $length );
+        if (function_exists('random_bytes')) {
+            $bytes = \random_bytes((int) \ceil($length / 2));
+            return $prefix . \substr(\bin2hex($bytes), 0, $length);
+        } elseif (function_exists('openssl_random_pseudo_bytes')) {
+            $bytes = \openssl_random_pseudo_bytes((int) \ceil($length / 2));
+            return $prefix . \substr(\bin2hex($bytes), 0, $length);
         } else {
-            return \substr( \str_shuffle( '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' ), 0, $length );
+            return \substr(\str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, $length);
         }
     }
 
@@ -361,19 +361,19 @@ class StringHelper
      * @return string
      */
     // @codingStandardsIgnoreLine
-    public static function hidingData( $data = null, array $aDataToHide = [] ): string
+    public static function hidingData($data = null, array $aDataToHide = []): string
     {
-        if ( empty( $data ) || ( empty( static::$aDataToHide ) && empty( $aDataToHide ) ) ) {
+        if (empty($data) || (empty(static::$aDataToHide) && empty($aDataToHide))) {
             return $data;
         }
 
-        $aDataToHide = empty( static::$aDataToHide )
+        $aDataToHide = empty(static::$aDataToHide)
             ? $aDataToHide
-            : ( empty( $aDataToHide )
+            : (empty($aDataToHide)
                 ? static::$aDataToHide
-                : \array_merge( static::$aDataToHide, $aDataToHide ) );
+                : \array_merge(static::$aDataToHide, $aDataToHide));
 
-        return \str_replace( $aDataToHide, '**hided**', \is_scalar( $data ) ? (string) $data : \var_export( $data, true ) );
+        return \str_replace($aDataToHide, '**hided**', \is_scalar($data) ? (string) $data : \var_export($data, true));
     }
 
     /**
@@ -386,26 +386,26 @@ class StringHelper
      *
      * @return bool
      */
-    public static function isBase64Encoded( ?string $sString = '', ?array $enc = ['UTF-8', 'ASCII'] ): bool
+    public static function isBase64Encoded(?string $sString = '', ?array $enc = ['UTF-8', 'ASCII']): bool
     {
-        if ( '' === $sString || \is_null( $sString ) ) {
+        if ('' === $sString || \is_null($sString)) {
             return false;
         }
 
         try {
-            if ( !preg_match( '/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $sString ) ) {
+            if (!preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $sString)) {
                 return false;
             }
 
-            $sDecoded = base64_decode( $sString, true );
-            if ( false === $sDecoded ) {
+            $sDecoded = base64_decode($sString, true);
+            if (false === $sDecoded) {
                 return false;
             }
 
-            if ( !in_array( mb_detect_encoding( $sDecoded, null, true ), $enc ) ) {
+            if (!in_array(mb_detect_encoding($sDecoded, null, true), $enc)) {
                 return false;
             }
-        } catch ( \Exception $e ) {
+        } catch (\Exception $e) {
             return false;
         }
 
@@ -422,13 +422,13 @@ class StringHelper
      *
      * @return string
      */
-    public static function toLatinString( ?string $sString = '', ?string $sDefault = '' ): string
+    public static function toLatinString(?string $sString = '', ?string $sDefault = ''): string
     {
-        if ( '' === $sString || \is_null( $sString ) ) {
+        if ('' === $sString || \is_null($sString)) {
             return $sDefault;
         }
 
-        return transliterator_transliterate( 'Any-Latin; Latin-ASCII; [\u0180-\u7fff] remove', $sString );
+        return transliterator_transliterate('Any-Latin; Latin-ASCII; [\u0180-\u7fff] remove', $sString);
     }
 
     /**
@@ -447,17 +447,17 @@ class StringHelper
      *
      * @return string
      */
-    public static function minClean( ?string $sString = '', ?string $sDefault = '' ): string
+    public static function minClean(?string $sString = '', ?string $sDefault = ''): string
     {
-        if ( '' === $sString || \is_null( $sString ) ) {
+        if ('' === $sString || \is_null($sString)) {
             return $sDefault;
         }
 
-        $sString = \str_ireplace( ["\0", '\\a', '\\b', "\v", "\e", "\f", "\t", "\r", "\n"], ' ', $sString );
-        $sString = \preg_replace( '/[\s]{2,}/', ' ', $sString );
-        $sString = \trim( $sString );
+        $sString = \str_ireplace(["\0", '\\a', '\\b', "\v", "\e", "\f", "\t", "\r", "\n"], ' ', $sString);
+        $sString = \preg_replace('/[\s]{2,}/', ' ', $sString);
+        $sString = \trim($sString);
 
-        return ( 0 == \mb_strlen( $sString, static::$encoding ) ) ? $sDefault : $sString;
+        return (0 == \mb_strlen($sString, static::$encoding)) ? $sDefault : $sString;
     }
 
     /**
@@ -471,23 +471,73 @@ class StringHelper
      * @return void
      */
     // @codingStandardsIgnoreLine
-    public static function printVar( $mixVar, string $sTitle = '' ): void
+    public static function printVar($mixVar, string $sTitle = ''): void
     {
         // read backtrace
         $bt = \debug_backtrace();
         // read file
-        $file = \file( $bt[0]['file'] );
+        $file = \file($bt[0]['file']);
         // select exact print_var_name($varname) line
         $src = $file[$bt[0]['line'] - 1];
         // search pattern
         $pat = '#(.*)' . __FUNCTION__ . ' *?\( *?(.*) *?\)(.*)#i';
         // extract $varname from match no 2
-        $var = \trim( \preg_replace( $pat, '$2', $src ) );
+        $var = \trim(\preg_replace($pat, '$2', $src));
         // print to browser
-        if ( !empty( $sTitle ) ) {
-            $var = $sTitle . ': ' . \str_replace( ", '" . $sTitle . "'", '', $var );
+        if (!empty($sTitle)) {
+            $var = $sTitle . ': ' . \str_replace(", '" . $sTitle . "'", '', $var);
         }
         // @codingStandardsIgnoreLine
-        echo '<pre>' . $var . ' = ' . \print_r( \current( \func_get_args() ), true ) . '</pre>';
+        echo '<pre>' . $var . ' = ' . \print_r(\current(\func_get_args()), true) . '</pre>';
+    }
+
+    /**
+     * Replaces a string in the file with another string and informs you whether the replacement has been performed
+     *
+     * Заменяет строку в файле на другую строку и информирует, была ли выполнена замена
+     *
+     * @param string $filename      The name of the file in which the replacement is being performed.
+     * @param string $searchString  The search string.
+     * @param string $replaceString The replacement string.
+     *
+     * @return array Returns an array where the first element is true if the replacement is completed or no replacement is required,
+     *               false if an error occurred, and the second element is details.
+     *
+     *               Возвращает массив, где первый элемент - true, если замена выполнена или замена не требуется,
+     *               false если произошла ошибка, а второй элемент - подробности.
+     */
+    public function replaceStringInFile(string $filename, string $searchString, string $replaceString, $enc = static::$encoding): array
+    {
+        try {
+            // Check if the file exists and if it is available for reading/writing
+            if (!\is_readable($filename) || !\is_writable($filename)) {
+                throw new \RuntimeException("Файл не доступен для чтения/записи: {$filename}");
+            }
+
+            // Reading the contents of the file
+            $fileContent = \file_get_contents($filename);
+            if ($fileContent === false) {
+                throw new \RuntimeException("Не удалось прочитать файл: {$filename}");
+            }
+
+            // Check if the required line is present in the file
+            if (\mb_strpos($fileContent, $searchString, 0, $enc) === false) {
+                // The required string was not found, no replacement is required
+                return [true, 'Искомая строка не найдена, замена не требуется'];
+            }
+
+            // Replacing the string
+            $updatedContent = \str_replace($searchString, $replaceString, $fileContent);
+
+            // Writing the updated content back to the file
+            $bytesWritten = \file_put_contents($filename, $updatedContent);
+            if ($bytesWritten === false) {
+                throw new \RuntimeException("Не удалось записать в файл: {$filename}");
+            }
+
+            return [true, "Успешно заменили строку {$searchString} на {$replaceString}"];
+        } catch (\Exception $e) {
+            return [false, $e->getMessage()];
+        }
     }
 }

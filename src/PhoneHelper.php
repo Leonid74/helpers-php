@@ -19,11 +19,40 @@ namespace Leonid74\Helpers;
 class PhoneHelper
 {
     /**
-     * Checking the validity of the Phone number.
+     * Formats a Russian mobile phone number by removing non-numeric characters and converting it starting with +7.
+     *
+     * Форматирует российский мобильный телефонный номер, удаляя нецифровые символы и преобразуя его в формат с +7.
+     *
+     * @param string|null $phoneNumber The original phone number.
+     *
+     * @return string|null A formatted phone number starting with +7, or null if the number is invalid.
+     */
+    private function formatRussianMobilePhoneNumber(?string $phoneNumber): ?string
+    {
+        if (empty($phoneNumber)) {
+            return null;
+        }
+
+        // Delete everything except the numbers
+        $phoneNumber = \preg_replace('/\D/', '', $phoneNumber);
+
+        // Check the length of the number (it should be 11 digits)
+        if (\strlen($phoneNumber) === 11) {
+            // Make sure that the number starts with 7 or 8 and replace it with +7
+            if ($phoneNumber[0] === '7' || $phoneNumber[0] === '8') {
+                return '+7' . \substr($phoneNumber, 1);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * (Deprecated) Checking the validity of the Phone number.
      * The function accepts a phone number in an arbitrary format and returns a phone
      * number in the format +7xxxxxxxxxx or false if the input phone number does not pass validation.
      *
-     * Проверка валидности номера телефона.
+     * (Метод устарел) Проверка валидности номера телефона.
      * Функция принимает телефонный номер в произвольном формате и возвращает телефонный
      * номер в формате +7xxxxxxxxxx или false, если входной номер телефона не проходит проверку валидности.
      *
