@@ -501,11 +501,11 @@ class StringHelper
      * @param string|null $replaceString The replacement string.
      * @param string      $enc           The encoding.
      *
-     * @return array Returns an array where the first element is true if the replacement is completed or no replacement is required,
-     *               false if an error occurred, and the second element is details.
+     * @return array Returns an array where the first element (result) is true if the replacement is completed or
+     *               no replacement is required, false if an error occurred, and the second element (description) is details.
      *
-     *               Возвращает массив, где первый элемент - true, если замена выполнена или замена не требуется,
-     *               false если произошла ошибка, а второй элемент - подробности.
+     *               Возвращает массив, где первый элемент (result) - true, если замена выполнена или замена не требуется,
+     *               false если произошла ошибка, а второй элемент (description) - подробности.
      */
     public static function replaceStringInFile(?string $filename, ?string $searchString, ?string $replaceString = '', $enc = static::$encoding): array
     {
@@ -534,7 +534,7 @@ class StringHelper
             // Checking if the required line is present in the file
             if (\mb_strpos($fileContent, $searchString, 0, $enc) === false) {
                 // The required string was not found, no replacement is required
-                return [true, 'Искомая строка не найдена, замена не требуется'];
+                return ['result' => true, 'description' => 'Искомая строка не найдена, замена не требуется'];
             }
 
             // Replacing the string
@@ -546,9 +546,9 @@ class StringHelper
                 throw new \RuntimeException("Не удалось записать в файл: {$filename}");
             }
 
-            return [true, "Успешно заменили строку {$searchString} на {$replaceString}"];
+            return ['result' => true, 'description' => "Успешно заменили строку {$searchString} на {$replaceString}"];
         } catch (\Exception $e) {
-            return [false, $e->getMessage()];
+            return ['result' => false, 'description' => $e->getMessage()];
         }
     }
 }
