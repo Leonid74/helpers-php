@@ -499,7 +499,7 @@ class StringHelper
      * @param string|null $filename      The name of the file in which the replacement is being performed.
      * @param string|null $searchString  The search string.
      * @param string|null $replaceString The replacement string.
-     * @param string      $enc           The encoding.
+     * @param string|null $enc           The encoding.
      *
      * @return array Returns an array where the first element (result) is true if the replacement is completed or
      *               no replacement is required, false if an error occurred, and the second element (description) is details.
@@ -507,7 +507,7 @@ class StringHelper
      *               Возвращает массив, где первый элемент (result) - true, если замена выполнена или замена не требуется,
      *               false если произошла ошибка, а второй элемент (description) - подробности.
      */
-    public static function replaceStringInFile(?string $filename, ?string $searchString, ?string $replaceString = '', $enc = ''): array
+    public static function replaceStringInFile(?string $filename, ?string $searchString, ?string $replaceString = '', ?string $enc = ''): array
     {
         try {
             // Checking an empty file name
