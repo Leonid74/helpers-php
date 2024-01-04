@@ -507,7 +507,7 @@ class StringHelper
      *               Возвращает массив, где первый элемент (result) - true, если замена выполнена или замена не требуется,
      *               false если произошла ошибка, а второй элемент (description) - подробности.
      */
-    public static function replaceStringInFile(?string $filename, ?string $searchString, ?string $replaceString = '', $enc = static::$encoding): array
+    public static function replaceStringInFile(?string $filename, ?string $searchString, ?string $replaceString = '', $enc = ''): array
     {
         try {
             // Checking an empty file name
@@ -518,6 +518,11 @@ class StringHelper
             // Checking an empty searchString
             if (empty($searchString)) {
                 throw new \RuntimeException("Передана пустая строка поиска");
+            }
+
+            // Checking an empty enc
+            if (empty($enc)) {
+                $enc = static::$encoding;
             }
 
             // Checking if the file exists and if it is available for reading/writing
