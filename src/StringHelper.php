@@ -496,9 +496,10 @@ class StringHelper
      *
      * Заменяет строку в файле на другую строку и информирует, была ли выполнена замена
      *
-     * @param string $filename      The name of the file in which the replacement is being performed.
-     * @param string $searchString  The search string.
-     * @param string $replaceString The replacement string.
+     * @param string|null $filename      The name of the file in which the replacement is being performed.
+     * @param string|null $searchString  The search string.
+     * @param string|null $replaceString The replacement string.
+     * @param string      $enc           The encoding.
      *
      * @return array Returns an array where the first element is true if the replacement is completed or no replacement is required,
      *               false if an error occurred, and the second element is details.
@@ -506,10 +507,20 @@ class StringHelper
      *               Возвращает массив, где первый элемент - true, если замена выполнена или замена не требуется,
      *               false если произошла ошибка, а второй элемент - подробности.
      */
-    public function replaceStringInFile(string $filename, string $searchString, string $replaceString, $enc = static::$encoding): array
+    public function replaceStringInFile(?string $filename, ?string $searchString, ?string $replaceString = '', $enc = static::$encoding): array
     {
         try {
-            // Check if the file exists and if it is available for reading/writing
+            // Checking an empty file name
+            if (empty($filename)) {
+                throw new \RuntimeException("Передано пустое имя файла");
+            }
+
+            // Checking an empty searchString
+            if (empty($searchString)) {
+                throw new \RuntimeException("Передана пустая строка поиска");
+            }
+
+            // Checking if the file exists and if it is available for reading/writing
             if (!\is_readable($filename) || !\is_writable($filename)) {
                 throw new \RuntimeException("Файл не доступен для чтения/записи: {$filename}");
             }
@@ -520,7 +531,7 @@ class StringHelper
                 throw new \RuntimeException("Не удалось прочитать файл: {$filename}");
             }
 
-            // Check if the required line is present in the file
+            // Checking if the required line is present in the file
             if (\mb_strpos($fileContent, $searchString, 0, $enc) === false) {
                 // The required string was not found, no replacement is required
                 return [true, 'Искомая строка не найдена, замена не требуется'];
