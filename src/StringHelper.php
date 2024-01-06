@@ -492,68 +492,112 @@ class StringHelper
     }
 
     /**
-     * Replaces a string in the file with another string and informs you whether the replacement has been performed
+     * Replaces all occurrences of a search string in the file with a replacement string.
      *
-     * Заменяет строку в файле на другую строку и информирует, была ли выполнена замена
+     * Заменяет строку в файле на другую строку и информирует, была ли выполнена замена.
      *
-     * @param string|null $filename      The name of the file in which the replacement is being performed.
-     * @param string|null $searchString  The search string.
-     * @param string|null $replaceString The replacement string.
-     * @param string|null $enc           The encoding.
+     * @param string $filename      path to the file where replacements should be done
+     * @param string $searchString  search string that needs to be replaced
+     * @param string $replaceString Replacement string. If not provided, defaults to an empty string.
+     * @param string $enc           The encoding. Defaults to the value of static::$encoding.
      *
-     * @return array Returns an array where the first element (result) is true if the replacement is completed or
-     *               no replacement is required, false if an error occurred, and the second element (description) is details.
+     * @throws \RuntimeException if file input/output errors occur, an exception is thrown
      *
-     *               Возвращает массив, где первый элемент (result) - true, если замена выполнена или замена не требуется,
-     *               false если произошла ошибка, а второй элемент (description) - подробности.
+     * @return array Returns an associative array with keys 'result', 'message', and 'replaced'.
+     *               'result' - boolean indicating the success of the operation (true on success).
+     *               'message' - a message about the outcome of the operation or an error that occurred.
+     *               'replaced' - boolean flag indicating whether a replacement has been performed (true if a replacement was made).
      */
-    public static function replaceStringInFile(?string $filename, ?string $searchString, ?string $replaceString = '', ?string $enc = ''): array
+    public static function replaceStringInFile(string $filename, string $searchString, string $replaceString = '', string $enc = ''): array
     {
-        try {
-            // Checking an empty file name
-            if (empty($filename)) {
-                throw new \RuntimeException("Передано пустое имя файла");
-            }
+        $response = [
+            'result'   => false,
+            'message'  => 'An unspecified error occurred.',
+            'replaced' => false,
+        ];
 
-            // Checking an empty searchString
-            if (empty($searchString)) {
-                throw new \RuntimeException("Передана пустая строка поиска");
-            }
+        // Validate input parameters
+        if (\trim($filename) === '') {
+            $response['message'] = 'File name cannot be empty.';
 
-            // Checking an empty enc
-            if (empty($enc)) {
-                $enc = static::$encoding;
-            }
-
-            // Checking if the file exists and if it is available for reading/writing
-            if (!\is_readable($filename) || !\is_writable($filename)) {
-                throw new \RuntimeException("Файл не доступен для чтения/записи: {$filename}");
-            }
-
-            // Reading the contents of the file
-            $fileContent = \file_get_contents($filename);
-            if ($fileContent === false) {
-                throw new \RuntimeException("Не удалось прочитать файл: {$filename}");
-            }
-
-            // Checking if the required line is present in the file
-            if (\mb_strpos($fileContent, $searchString, 0, $enc) === false) {
-                // The required string was not found, no replacement is required
-                return ['result' => true, 'description' => 'Искомая строка не найдена, замена не требуется'];
-            }
-
-            // Replacing the string
-            $updatedContent = \str_replace($searchString, $replaceString, $fileContent);
-
-            // Writing the updated content back to the file
-            $bytesWritten = \file_put_contents($filename, $updatedContent);
-            if ($bytesWritten === false) {
-                throw new \RuntimeException("Не удалось записать в файл: {$filename}");
-            }
-
-            return ['result' => true, 'description' => "Успешно заменили строку {$searchString} на {$replaceString}"];
-        } catch (\Exception $e) {
-            return ['result' => false, 'description' => $e->getMessage()];
+            return $response;
         }
+
+        if (\trim($searchString) === '') {
+            $response['message'] = 'Search string cannot be empty.';
+
+            return $response;
+        }
+
+        if (\trim($enc) === '') {
+            $enc = self::$encoding;
+        }
+
+        if (!\file_exists($filename)) {
+            $response['message'] = "File does not exist: {$filename}.";
+
+            return $response;
+        }
+
+        // Attempt to open the file for reading and writing without truncation
+        $fileHandle = \fopen($filename, 'r+');
+        if (!$fileHandle) {
+            $response['message'] = "Failed to open the file {$filename} for reading and writing.";
+
+            return $response;
+        }
+
+        // Acquire an exclusive lock on the file
+        if (!\flock($fileHandle, LOCK_EX)) {
+            \fclose($fileHandle);
+            $response['message'] = "Failed to acquire an exclusive lock on the file {$filename}.";
+
+            return $response;
+        }
+
+        try {
+            // Atomically read the entire file content
+            $fileContent = \stream_get_contents($fileHandle);
+            if ($fileContent === false) {
+                $response['message'] = "Failed to read the file content {$filename}.";
+
+                throw new \RuntimeException($response['message']);
+            }
+
+            // Check for the presence of the search string within the file content and
+            // Attempt replacement if search string is found
+            if (\mb_strpos($fileContent, $searchString, 0, $enc) === false) {
+                $response['message'] = 'Search string not found, no replacement necessary.';
+                $response['result'] = true;
+            } else {
+                $updatedContent = \str_replace($searchString, $replaceString, $fileContent);
+
+                // Rewind the file pointer to the beginning
+                \rewind($fileHandle);
+
+                // Atomically Write the updated content back to the file,
+                // Flush the output buffer and synchronize data on disk,
+                // Truncate the file to the written length if necessary
+                if (\fwrite($fileHandle, $updatedContent) === false || !\fflush($fileHandle) || !\ftruncate($fileHandle, \mb_strlen($updatedContent, $enc))) {
+                    $response['message'] = "Failed to write the updated content to the file {$filename}.";
+
+                    throw new \RuntimeException($response['message']);
+                }
+
+                // Update response on success
+                $response['result'] = true;
+                $response['message'] = 'String replacement successful.';
+                $response['replaced'] = true;
+            }
+        } catch (\Throwable $e) {
+            // Capture all Throwable errors
+            $response['message'] = "Error: {$e->getMessage()}";
+        } finally {
+            // Release the lock and close the file handle
+            \flock($fileHandle, LOCK_UN);
+            \fclose($fileHandle);
+        }
+
+        return $response;
     }
 }
