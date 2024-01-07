@@ -20,9 +20,9 @@ class StringHelper
 {
     /**
      * Set the default encoding.
-     * Can be reassign like this: \Leonid74\Helpers\StringHelper::$encoding = 'Windows-1251';
+     * Can be reassign like this: \Leonid74\Helpers\StringHelper::$defaultEncoding = 'Windows-1251';
      */
-    public static $encoding = 'UTF-8';
+    public static $defaultEncoding = 'UTF-8';
 
     /**
      * Set the array of hiding data, using hidingData() function.
@@ -38,7 +38,7 @@ class StringHelper
     public static function mb_stristr(string $haystack, string $needle, bool $before_needle = false)
     {
         return function_exists('mb_stristr')
-            ? \mb_stristr($haystack, $needle, $before_needle, static::$encoding)
+            ? \mb_stristr($haystack, $needle, $before_needle, static::$defaultEncoding)
             : \stristr($haystack, $needle, $before_needle);
     }
 
@@ -46,7 +46,7 @@ class StringHelper
     public static function mb_strstr(string $haystack, string $needle, bool $before_needle = false)
     {
         return function_exists('mb_strstr')
-            ? \mb_strstr($haystack, $needle, $before_needle, static::$encoding)
+            ? \mb_strstr($haystack, $needle, $before_needle, static::$defaultEncoding)
             : \strstr($haystack, $needle, $before_needle);
     }
 
@@ -54,7 +54,7 @@ class StringHelper
     public static function mb_stripos(string $haystack, string $needle, int $start = 0)
     {
         return function_exists('mb_stripos')
-            ? \mb_stripos($haystack, $needle, $start, static::$encoding)
+            ? \mb_stripos($haystack, $needle, $start, static::$defaultEncoding)
             : \stripos($haystack, $needle, $start);
     }
 
@@ -62,7 +62,7 @@ class StringHelper
     public static function mb_strripos(string $haystack, string $needle, int $start = 0)
     {
         return function_exists('mb_strripos')
-            ? \mb_strripos($haystack, $needle, $start, static::$encoding)
+            ? \mb_strripos($haystack, $needle, $start, static::$defaultEncoding)
             : \strripos($haystack, $needle, $start);
     }
 
@@ -70,7 +70,7 @@ class StringHelper
     public static function mb_strpos(string $haystack, string $needle, int $start = 0)
     {
         return function_exists('mb_strpos')
-            ? \mb_strpos($haystack, $needle, $start, static::$encoding)
+            ? \mb_strpos($haystack, $needle, $start, static::$defaultEncoding)
             : \strpos($haystack, $needle, $start);
     }
 
@@ -78,7 +78,7 @@ class StringHelper
     public static function mb_strrpos(string $haystack, string $needle, int $start = 0)
     {
         return function_exists('mb_strrpos')
-            ? \mb_strrpos($haystack, $needle, $start, static::$encoding)
+            ? \mb_strrpos($haystack, $needle, $start, static::$defaultEncoding)
             : \strrpos($haystack, $needle, $start);
     }
 
@@ -86,7 +86,7 @@ class StringHelper
     public static function mb_substr(string $string, int $start, int $length = null): string
     {
         return function_exists('mb_substr')
-            ? \mb_substr($string, $start, $length, static::$encoding)
+            ? \mb_substr($string, $start, $length, static::$defaultEncoding)
             : \substr($string, $start, $length);
     }
 
@@ -114,7 +114,7 @@ class StringHelper
         }
 
         return function_exists('mb_strlen')
-            ? \mb_strlen($string, static::$encoding)
+            ? \mb_strlen($string, static::$defaultEncoding)
             : \strlen($string);
     }
 
@@ -126,7 +126,7 @@ class StringHelper
         }
 
         return function_exists('mb_strtolower')
-            ? \mb_strtolower($string, static::$encoding)
+            ? \mb_strtolower($string, static::$defaultEncoding)
             : \strtolower($string);
     }
 
@@ -138,7 +138,7 @@ class StringHelper
         }
 
         return function_exists('mb_strtoupper')
-            ? \mb_strtoupper($string, static::$encoding)
+            ? \mb_strtoupper($string, static::$defaultEncoding)
             : \strtoupper($string);
     }
 
@@ -160,7 +160,7 @@ class StringHelper
         }
 
         return function_exists('mb_convert_case')
-            ? \mb_convert_case($string, MB_CASE_TITLE, static::$encoding)
+            ? \mb_convert_case($string, MB_CASE_TITLE, static::$defaultEncoding)
             : \ucfirst($string);
     }
 
@@ -171,7 +171,7 @@ class StringHelper
             return $sDefault;
         }
 
-        return \htmlspecialchars($string, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, static::$encoding);
+        return \htmlspecialchars($string, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, static::$defaultEncoding);
     }
 
     // @codingStandardsIgnoreLine
@@ -191,7 +191,7 @@ class StringHelper
             return $sDefault;
         }
 
-        return \htmlentities($string, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, static::$encoding);
+        return \htmlentities($string, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, static::$defaultEncoding);
     }
 
     // @codingStandardsIgnoreLine
@@ -201,7 +201,7 @@ class StringHelper
             return $sDefault;
         }
 
-        return \html_entity_decode($string, ENT_COMPAT | ENT_HTML5, static::$encoding);
+        return \html_entity_decode($string, ENT_COMPAT | ENT_HTML5, static::$defaultEncoding);
     }
 
     // @codingStandardsIgnoreLine
@@ -457,7 +457,7 @@ class StringHelper
         $sString = \preg_replace('/[\s]{2,}/', ' ', $sString);
         $sString = \trim($sString);
 
-        return (0 == \mb_strlen($sString, static::$encoding)) ? $sDefault : $sString;
+        return (0 == \mb_strlen($sString, static::$defaultEncoding)) ? $sDefault : $sString;
     }
 
     /**
@@ -499,7 +499,7 @@ class StringHelper
      * @param string $filename      path to the file where replacements should be done
      * @param string $searchString  search string that needs to be replaced
      * @param string $replaceString Replacement string. If not provided, defaults to an empty string.
-     * @param string $enc           The encoding. Defaults to the value of static::$encoding.
+     * @param string $enc           The encoding. Defaults to the value of static::$defaultEncoding.
      *
      * @throws \RuntimeException if file input/output errors occur, an exception is thrown
      *
@@ -508,7 +508,7 @@ class StringHelper
      *               'message' - a message about the outcome of the operation or an error that occurred.
      *               'replaced' - boolean flag indicating whether a replacement has been performed (true if a replacement was made).
      */
-    public static function replaceStringInFile(string $filename, string $searchString, string $replaceString = '', string $enc = ''): array
+    public function replaceStringInFile(string $filename, string $searchString, string $replaceString = '', string $enc = ''): array
     {
         $response = [
             'result'   => false,
@@ -529,73 +529,57 @@ class StringHelper
             return $response;
         }
 
-        if (\trim($enc) === '') {
-            $enc = self::$encoding;
-        }
-
-        if (!\file_exists($filename)) {
-            $response['message'] = "File does not exist: {$filename}.";
-
-            return $response;
-        }
-
-        // Attempt to open the file for reading and writing without truncation
-        $fileHandle = \fopen($filename, 'r+');
-        if (!$fileHandle) {
-            $response['message'] = "Failed to open the file {$filename} for reading and writing.";
-
-            return $response;
-        }
-
-        // Acquire an exclusive lock on the file
-        if (!\flock($fileHandle, LOCK_EX)) {
-            \fclose($fileHandle);
-            $response['message'] = "Failed to acquire an exclusive lock on the file {$filename}.";
+        // Checking the existence of the file
+        if (\file_exists($filename) === false) {
+            $response['message'] = "File does not exist: '{$filename}'.";
 
             return $response;
         }
 
         try {
-            // Atomically read the entire file content
-            $fileContent = \stream_get_contents($fileHandle);
+            // Read the entire file content
+            $fileContent = \file_get_contents($filename);
             if ($fileContent === false) {
-                $response['message'] = "Failed to read the file content {$filename}.";
+                throw new \RuntimeException("Cannot read the file '{$filename}'.");
+            }
 
-                throw new \RuntimeException($response['message']);
+            // Set the encoding
+            if (\trim($enc) === '') {
+                $enc = self::$defaultEncoding;
             }
 
             // Check for the presence of the search string within the file content and
-            // Attempt replacement if search string is found
             if (\mb_strpos($fileContent, $searchString, 0, $enc) === false) {
                 $response['message'] = 'Search string not found, no replacement necessary.';
                 $response['result'] = true;
             } else {
+                // Attempt replacement
                 $updatedContent = \str_replace($searchString, $replaceString, $fileContent);
 
-                // Rewind the file pointer to the beginning
-                \rewind($fileHandle);
+                // Create the temporary file for write
+                $tmpFile = \tempnam(\sys_get_temp_dir(), 'TMP_');
+                if ($tmpFile === false) {
+                    throw new \RuntimeException('Cannot create temporary file.');
+                }
 
-                // Atomically Write the updated content back to the file,
-                // Flush the output buffer and synchronize data on disk,
-                // Truncate the file to the written length if necessary
-                if (\fwrite($fileHandle, $updatedContent) === false || !\fflush($fileHandle) || !\ftruncate($fileHandle, \mb_strlen($updatedContent, $enc))) {
-                    $response['message'] = "Failed to write the updated content to the file {$filename}.";
+                // Write the updated content to temporary file
+                if (\file_put_contents($tmpFile, $updatedContent) === false) {
+                    throw new \RuntimeException("Cannot write to temporary file '{$tmpFile}'.");
+                }
 
-                    throw new \RuntimeException($response['message']);
+                // Replace the original file with temporary file
+                if (\rename($tmpFile, $filename) === false) {
+                    throw new \RuntimeException("Cannot replace the original file '{$filename}' with temporary file '{$tmpFile}'.");
                 }
 
                 // Update response on success
                 $response['result'] = true;
-                $response['message'] = 'String replacement successful.';
+                $response['message'] = "Successful replace string '{$searchString}' with string '{$replaceString}'.";
                 $response['replaced'] = true;
             }
         } catch (\Throwable $e) {
             // Capture all Throwable errors
-            $response['message'] = "Error: {$e->getMessage()}";
-        } finally {
-            // Release the lock and close the file handle
-            \flock($fileHandle, LOCK_UN);
-            \fclose($fileHandle);
+            $response['message'] = "Error occurred: {$e->getMessage()}";
         }
 
         return $response;
