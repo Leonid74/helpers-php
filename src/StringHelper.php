@@ -508,7 +508,7 @@ class StringHelper
      *               'message' - a message about the outcome of the operation or an error that occurred.
      *               'replaced' - boolean flag indicating whether a replacement has been performed (true if a replacement was made).
      */
-    public function replaceStringInFile(string $filename, string $searchString, string $replaceString = '', string $enc = ''): array
+    public static function replaceStringInFile(string $filename, string $searchString, string $replaceString = '', string $enc = ''): array
     {
         $response = [
             'result'   => false,
