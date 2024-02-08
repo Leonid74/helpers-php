@@ -301,28 +301,24 @@ class StringHelper
     }
 
     /**
-     * Generating a unique UUID of type 4a27ab2e-ae70-419f-9a26-42a67805d87e.
+     * Generating a unique UUID v4 of (4a27ab2e-ae70-419f-9a26-42a67805d87e).
      *
-     * Генерация уникального UUID типа 4a27ab2e-ae70-419f-9a26-42a67805d87e.
+     * Генерация уникального UUID версии 4 (4a27ab2e-ae70-419f-9a26-42a67805d87e).
      *
-     * @return string
-     *
-     * @author myrusakov.ru
-     * @edit   Leonid Sheikman (leonid74)
+     * @return string string uuid
      */
     public static function generateUUID(): string
     {
-        return \sprintf(
-            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            \mt_rand(0, 0xffff),
-            \mt_rand(0, 0xffff),
-            \mt_rand(0, 0xffff),
-            \mt_rand(0, 0x0fff) | 0x4000,
-            \mt_rand(0, 0x3fff) | 0x8000,
-            \mt_rand(0, 0xffff),
-            \mt_rand(0, 0xffff),
-            \mt_rand(0, 0xffff)
-        );
+        $bytes = random_bytes(16);
+
+        // Устанавливаем версию 4 (биты 12-15 первого символа времени)
+        $bytes[6] = chr(ord($bytes[6]) & 0x0f | 0x40);
+
+        // Устанавливаем вариант RFC 4122 (10xx), изменяя биты 6-7 первого символа последовательности
+        $bytes[8] = chr(ord($bytes[8]) & 0x3f | 0x80);
+
+        // Форматируем и возвращаем UUID
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($bytes), 4));
     }
 
     /**
