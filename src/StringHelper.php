@@ -580,4 +580,54 @@ class StringHelper
 
         return $response;
     }
+
+    /**
+     * Trims a string to a specified length, preserving the integrity of the last word.
+     *
+     * Обрезаем строку до заданной длины с учетом целостности последнего слова.
+     *
+     * This function will trim the input string to a maximum specified length without
+     * cutting off the last word. If the next word would exceed the length limit,
+     * the string is trimmed up to the previous word. If no spaces are found within
+     * the limit, or if the first word exceeds the limit, an empty string is returned.
+     *
+     * @param string|null $sString The input string to be trimmed.
+     * @param int $maxLength The maximum allowed length of the output string.
+     * @param string $sDefault Default value.
+     *
+     * @return string The trimmed string with preserved last word integrity up to maxLength.
+     */
+    public static function trimStringToLastWord(?string $sString = '', int $maxLength = 0, string $sDefault = ''): string
+    {
+        if ('' === $sString || null === $sString || 0 == $maxLength) {
+            return $sDefault;
+        }
+
+        $sString = \trim($sString);
+
+        // Return the original string if it is within maxLength.
+        if (static::mb_strlen($sString) <= $maxLength) {
+            return $sString;
+        }
+
+        // Trim the string to maxLength first to see if we're cutting through a word.
+        $trimmedString = static::mb_substr($sString, 0, $maxLength);
+
+        // Check if we are on a space or just passed one; if so, we can return early.
+        if ($sString[$maxLength] == ' ' || $sString[$maxLength-1] == ' ') {
+            return \rtrim($trimmedString);
+        }
+
+        // Find the last space in our trimmed string to avoid cutting off a word.
+        $lastSpacePosition = \strrpos($trimmedString, ' ');
+
+        // If there's no space at all, return an empty string as we cannot preserve any word.
+        if ($lastSpacePosition === false) {
+            return $sDefault;
+        }
+
+        // Return substring up to the last found space position.
+        return static::mb_substr($trimmedString, 0, $lastSpacePosition);
+    }
+
 }
