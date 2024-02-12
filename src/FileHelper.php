@@ -62,7 +62,7 @@ class FileHelper
      *
      * Конвертация размера файла в удобный для чтения формат.
      *
-     * @param mixed|null $bytes
+     * @param mixed $bytes
      * @param int        $decimals
      *
      * @return string human readable file size (2.87 MB)
@@ -71,7 +71,7 @@ class FileHelper
      *
      * @edit   Leonid Sheikman <leonid@sheikman.ru>
      */
-    public static function getHumanFileSize(?mixed $bytes, int $decimals = 2): string
+    public static function getHumanFileSize(mixed $bytes, int $decimals = 2): string
     {
         if (null === $bytes) {
             return '0';
