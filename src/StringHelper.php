@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Helper class for processing strings
@@ -7,6 +7,7 @@
  *
  * @author Leonid Sheikman (leonid74)
  * @copyright 2019-2022 Leonid Sheikman
+ *
  * @see https://github.com/Leonid74/helpers-php
  *
  * This file is part of the project.
@@ -33,11 +34,15 @@ class StringHelper
 
     /**
      * Most used common php functions.
+     *
+     * @param string $haystack
+     * @param string $needle
+     * @param bool   $before_needle
      */
     // @codingStandardsIgnoreLine
     public static function mb_stristr(string $haystack, string $needle, bool $before_needle = false)
     {
-        return function_exists('mb_stristr')
+        return \function_exists('mb_stristr')
             ? \mb_stristr($haystack, $needle, $before_needle, static::$defaultEncoding)
             : \stristr($haystack, $needle, $before_needle);
     }
@@ -45,7 +50,7 @@ class StringHelper
     // @codingStandardsIgnoreLine
     public static function mb_strstr(string $haystack, string $needle, bool $before_needle = false)
     {
-        return function_exists('mb_strstr')
+        return \function_exists('mb_strstr')
             ? \mb_strstr($haystack, $needle, $before_needle, static::$defaultEncoding)
             : \strstr($haystack, $needle, $before_needle);
     }
@@ -53,7 +58,7 @@ class StringHelper
     // @codingStandardsIgnoreLine
     public static function mb_stripos(string $haystack, string $needle, int $start = 0)
     {
-        return function_exists('mb_stripos')
+        return \function_exists('mb_stripos')
             ? \mb_stripos($haystack, $needle, $start, static::$defaultEncoding)
             : \stripos($haystack, $needle, $start);
     }
@@ -61,7 +66,7 @@ class StringHelper
     // @codingStandardsIgnoreLine
     public static function mb_strripos(string $haystack, string $needle, int $start = 0)
     {
-        return function_exists('mb_strripos')
+        return \function_exists('mb_strripos')
             ? \mb_strripos($haystack, $needle, $start, static::$defaultEncoding)
             : \strripos($haystack, $needle, $start);
     }
@@ -69,7 +74,7 @@ class StringHelper
     // @codingStandardsIgnoreLine
     public static function mb_strpos(string $haystack, string $needle, int $start = 0)
     {
-        return function_exists('mb_strpos')
+        return \function_exists('mb_strpos')
             ? \mb_strpos($haystack, $needle, $start, static::$defaultEncoding)
             : \strpos($haystack, $needle, $start);
     }
@@ -77,7 +82,7 @@ class StringHelper
     // @codingStandardsIgnoreLine
     public static function mb_strrpos(string $haystack, string $needle, int $start = 0)
     {
-        return function_exists('mb_strrpos')
+        return \function_exists('mb_strrpos')
             ? \mb_strrpos($haystack, $needle, $start, static::$defaultEncoding)
             : \strrpos($haystack, $needle, $start);
     }
@@ -85,7 +90,7 @@ class StringHelper
     // @codingStandardsIgnoreLine
     public static function mb_substr(string $string, int $start, int $length = null): string
     {
-        return function_exists('mb_substr')
+        return \function_exists('mb_substr')
             ? \mb_substr($string, $start, $length, static::$defaultEncoding)
             : \substr($string, $start, $length);
     }
@@ -113,7 +118,7 @@ class StringHelper
             return 0;
         }
 
-        return function_exists('mb_strlen')
+        return \function_exists('mb_strlen')
             ? \mb_strlen($string, static::$defaultEncoding)
             : \strlen($string);
     }
@@ -125,7 +130,7 @@ class StringHelper
             return $sDefault;
         }
 
-        return function_exists('mb_strtolower')
+        return \function_exists('mb_strtolower')
             ? \mb_strtolower($string, static::$defaultEncoding)
             : \strtolower($string);
     }
@@ -137,7 +142,7 @@ class StringHelper
             return $sDefault;
         }
 
-        return function_exists('mb_strtoupper')
+        return \function_exists('mb_strtoupper')
             ? \mb_strtoupper($string, static::$defaultEncoding)
             : \strtoupper($string);
     }
@@ -159,7 +164,7 @@ class StringHelper
             return $sDefault;
         }
 
-        return function_exists('mb_convert_case')
+        return \function_exists('mb_convert_case')
             ? \mb_convert_case($string, MB_CASE_TITLE, static::$defaultEncoding)
             : \ucfirst($string);
     }
@@ -211,7 +216,8 @@ class StringHelper
             return $sDefault;
         }
 
-        $string = \preg_replace("/%u([0-9a-f]{3,4})/i", "&#x\\1;", \urldecode($string));
+        $string = \preg_replace('/%u([0-9a-f]{3,4})/i', '&#x\\1;', \urldecode($string));
+
         return self::html_entity_decode($string);
     }
 
@@ -250,7 +256,7 @@ class StringHelper
             return $sDefault;
         }
 
-        return 0 === \strncasecmp(\pack('CCC', 0xef, 0xbb, 0xbf), $sString, 3) ? \mb_substr($sString, 3) : $sString;
+        return 0 === \strncasecmp(\pack('CCC', 0xEF, 0xBB, 0xBF), $sString, 3) ? \mb_substr($sString, 3) : $sString;
     }
 
     /**
@@ -281,8 +287,8 @@ class StringHelper
      * StringHelper::truncateString('Lorem ipsum inum', 15, '>>>');  // returns 'Lorem ipsum >>>'
      *
      * @param string $sString
-     * @param int    $iLength (defaults to 100)
-     * @param string $sSuffix (optional, defaults to '...')
+     * @param int    $iLength  (defaults to 100)
+     * @param string $sSuffix  (optional, defaults to '...')
      * @param string $sDefault
      *
      * @return string
@@ -309,16 +315,16 @@ class StringHelper
      */
     public static function generateUUID(): string
     {
-        $bytes = random_bytes(16);
+        $bytes = \random_bytes(16);
 
         // Устанавливаем версию 4 (биты 12-15 первого символа времени)
-        $bytes[6] = chr(ord($bytes[6]) & 0x0f | 0x40);
+        $bytes[6] = \chr(\ord($bytes[6]) & 0x0F | 0x40);
 
         // Устанавливаем вариант RFC 4122 (10xx), изменяя биты 6-7 первого символа последовательности
-        $bytes[8] = chr(ord($bytes[8]) & 0x3f | 0x80);
+        $bytes[8] = \chr(\ord($bytes[8]) & 0x3F | 0x80);
 
         // Форматируем и возвращаем UUID
-        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($bytes), 4));
+        return \vsprintf('%s%s-%s-%s-%s-%s%s%s', \str_split(\bin2hex($bytes), 4));
     }
 
     /**
@@ -335,15 +341,17 @@ class StringHelper
      */
     public static function generateUniqId(int $length = 5, string $prefix = ''): string
     {
-        if (function_exists('random_bytes')) {
+        if (\function_exists('random_bytes')) {
             $bytes = \random_bytes((int) \ceil($length / 2));
+
             return $prefix . \substr(\bin2hex($bytes), 0, $length);
-        } elseif (function_exists('openssl_random_pseudo_bytes')) {
+        } elseif (\function_exists('openssl_random_pseudo_bytes')) {
             $bytes = \openssl_random_pseudo_bytes((int) \ceil($length / 2));
+
             return $prefix . \substr(\bin2hex($bytes), 0, $length);
-        } else {
-            return \substr(\str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, $length);
         }
+
+        return \substr(\str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, $length);
     }
 
     /**
@@ -377,8 +385,9 @@ class StringHelper
      *
      * Проверка, закодирована ли строка в формате Base64
      *
-     * @param string $data
-     * @param array $enc
+     * @param ?string $sString
+     * @param array   $enc
+     * @param string  $data
      *
      * @return bool
      */
@@ -389,16 +398,16 @@ class StringHelper
         }
 
         try {
-            if (!preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $sString)) {
+            if (!\preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $sString)) {
                 return false;
             }
 
-            $sDecoded = base64_decode($sString, true);
+            $sDecoded = \base64_decode($sString, true);
             if (false === $sDecoded) {
                 return false;
             }
 
-            if (!in_array(mb_detect_encoding($sDecoded, null, true), $enc)) {
+            if (!\in_array(\mb_detect_encoding($sDecoded, null, true), $enc)) {
                 return false;
             }
         } catch (\Exception $e) {
@@ -424,7 +433,7 @@ class StringHelper
             return $sDefault;
         }
 
-        return transliterator_transliterate('Any-Latin; Latin-ASCII; [\u0180-\u7fff] remove', $sString);
+        return \transliterator_transliterate('Any-Latin; Latin-ASCII; [\u0180-\u7fff] remove', $sString);
     }
 
     /**
@@ -497,12 +506,12 @@ class StringHelper
      * @param string $replaceString Replacement string. If not provided, defaults to an empty string.
      * @param string $enc           The encoding. Defaults to the value of static::$defaultEncoding.
      *
-     * @throws \RuntimeException if file input/output errors occur, an exception is thrown
-     *
      * @return array Returns an associative array with keys 'result', 'message', and 'replaced'.
      *               'result' - boolean indicating the success of the operation (true on success).
      *               'message' - a message about the outcome of the operation or an error that occurred.
      *               'replaced' - boolean flag indicating whether a replacement has been performed (true if a replacement was made).
+     *
+     * @throws \RuntimeException if file input/output errors occur, an exception is thrown
      */
     public static function replaceStringInFile(string $filename, string $searchString, string $replaceString = '', string $enc = ''): array
     {
@@ -547,7 +556,7 @@ class StringHelper
             // Check for the presence of the search string within the file content and
             if (\mb_strpos($fileContent, $searchString, 0, $enc) === false) {
                 $response['message'] = 'Search string not found, no replacement necessary.';
-                $response['result'] = true;
+                $response['result']  = true;
             } else {
                 // Attempt replacement
                 $updatedContent = \str_replace($searchString, $replaceString, $fileContent);
@@ -569,8 +578,8 @@ class StringHelper
                 }
 
                 // Update response on success
-                $response['result'] = true;
-                $response['message'] = "Successful replace string '{$searchString}' with string '{$replaceString}'.";
+                $response['result']   = true;
+                $response['message']  = "Successful replace string '{$searchString}' with string '{$replaceString}'.";
                 $response['replaced'] = true;
             }
         } catch (\Throwable $e) {
@@ -591,11 +600,11 @@ class StringHelper
      * the string is trimmed up to the previous word. If no spaces are found within
      * the limit, or if the first word exceeds the limit, an empty string is returned.
      *
-     * @param string|null $sString The input string to be trimmed.
-     * @param int $maxLength The maximum allowed length of the output string.
-     * @param string $sDefault Default value.
+     * @param string|null $sString   the input string to be trimmed
+     * @param int         $maxLength the maximum allowed length of the output string
+     * @param string      $sDefault  default value
      *
-     * @return string The trimmed string with preserved last word integrity up to maxLength.
+     * @return string the trimmed string with preserved last word integrity up to maxLength
      */
     public static function trimStringToLastWord(?string $sString = '', int $maxLength = 0, string $sDefault = ''): string
     {
@@ -614,7 +623,7 @@ class StringHelper
         $trimmedString = static::mb_substr($sString, 0, $maxLength);
 
         // Check if we are on a space or just passed one; if so, we can return early.
-        if ($sString[$maxLength] == ' ' || $sString[$maxLength-1] == ' ') {
+        if ($sString[$maxLength] == ' ' || $sString[$maxLength - 1] == ' ') {
             return \rtrim($trimmedString);
         }
 
@@ -630,4 +639,96 @@ class StringHelper
         return static::mb_substr($trimmedString, 0, $lastSpacePosition);
     }
 
+    /**
+     * Escapes HTML special characters in a string by replacing predefined entities (for Telegram purposes).
+     *
+     * Экранируем некоторые HTML символы в строке для использования в Телеграм
+     *
+     * @param string $string the original string to escape HTML special characters
+     *
+     * @return string the escaped string with HTML special characters replaced
+     */
+    public static function escapeTelegramHTML(string $string): string
+    {
+        return self::replaceKeyToValue($string, [
+            '&' => '&amp;',
+            '<' => '&lt;',
+            '>' => '&gt;',
+            '"' => '&quot;',
+            "'" => '&#039;',
+        ]);
+    }
+
+    /**
+     * Escapes Markdown special characters in a string by replacing them with escape sequences (for Telegram purposes).
+     *
+     * Экранируем некоторые Markdown символы в строке для использования в Телеграм
+     *
+     * @param string $string the original string to escape Markdown special characters
+     *
+     * @return string the escaped string with Markdown special characters replaced
+     */
+    public static function escapeTelegramMarkdown(string $string): string
+    {
+        return self::replaceKeyToValue($string, [
+            '\\' => '\\\\',
+            '_'  => '\_',
+            '*'  => '\*',
+            '`'  => '\`',
+            '['  => '\[',
+        ]);
+    }
+
+    /**
+     * Escapes Markdown V2 special characters in a string by replacing them with escape sequences (for Telegram purposes).
+     *
+     * Экранируем некоторые Markdown V2 символы в строке для использования в Телеграм
+     *
+     * @param string $string the original string to escape Markdown special characters
+     *
+     * @return string the escaped string with Markdown special characters replaced
+     */
+    public static function escapeTelegramMarkdownV2(string $string): string
+    {
+        return self::replaceKeyToValue($string, [
+            '\\' => '\\\\',
+            '_'  => '\_',
+            '*'  => '\*',
+            '['  => '\[',
+            ']'  => '\]',
+            '('  => '\(',
+            ')'  => '\)',
+            '~'  => '\~',
+            '`'  => '\`',
+            '>'  => '\>',
+            '#'  => '\#',
+            '+'  => '\+',
+            '-'  => '\-',
+            '='  => '\=',
+            '|'  => '\|',
+            '{'  => '\{',
+            '}'  => '\}',
+            '.'  => '\.',
+            '!'  => '\!',
+        ]);
+    }
+
+    /**
+     * Replaces keys with corresponding values in a string using str_replace function.
+     *
+     * Заменяем символы в строке, используя для замены ключи и значения массива.
+     *
+     * @param string $string the original string to perform replacements on
+     * @param array  $array  an associative array where keys are to be replaced with values
+     *
+     * @return string the modified string after performing the replacements
+     */
+    private static function replaceKeyToValue(string $string, array $array): string
+    {
+        return \str_replace(
+            \array_keys($array),
+            \array_values($array),
+            $string
+        );
+    }
 }
