@@ -24,13 +24,13 @@ class UrlHelper
      * UrlHelper::addTrailingSlash('https://aaa.bbb.ccc');   // returns 'https://aaa.bbb.ccc/'
      * UrlHelper::addTrailingSlash('https://aaa.bbb.ccc/');  // returns 'https://aaa.bbb.ccc/'
      *
-     * @param string $sUrl
+     * @param string|null $sUrl
      *
      * @return string
      */
     public static function addTrailingSlash(?string $sUrl = ''): string
     {
-        if ('' === $sUrl || \is_null($sUrl)) {
+        if (null === $sUrl || '' === $sUrl) {
             return '/';
         }
 
@@ -42,13 +42,13 @@ class UrlHelper
      *
      * UrlHelper::removeTrailingSlash('https://aaa.bbb.ccc/');  // returns 'https://aaa.bbb.ccc'
      *
-     * @param string $sUrl
+     * @param string|null $sUrl
      *
      * @return string
      */
     public static function removeTrailingSlash(?string $sUrl = ''): string
     {
-        if ('' === $sUrl || \is_null($sUrl)) {
+        if (null === $sUrl || '' === $sUrl) {
             return '';
         }
 
@@ -61,13 +61,13 @@ class UrlHelper
      * UrlHelper::prependSlash('aaa/bbb/ccc');   // returns '/aaa/bbb/ccc'
      * UrlHelper::prependSlash('/aaa/bbb/ccc');  // returns '/aaa/bbb/ccc'
      *
-     * @param string $sUrl
+     * @param string|null $sUrl
      *
      * @return string
      */
     public static function prependSlash(?string $sUrl = ''): string
     {
-        if ('' === $sUrl || \is_null($sUrl)) {
+        if (null === $sUrl || '' === $sUrl) {
             return '/';
         }
 
@@ -79,13 +79,13 @@ class UrlHelper
      *
      * UrlHelper::getHostOnly('https://aaa.bbb.ccc:9090/path?arg=value#anchor');  // returns 'aaa.bbb.ccc'
      *
-     * @param string $sUrl
+     * @param string|null $sUrl
      *
      * @return string
      */
     public static function getHostOnly(?string $sUrl = ''): string
     {
-        if ('' === $sUrl || \is_null($sUrl)) {
+        if (null === $sUrl || '' === $sUrl) {
             return '';
         }
 
@@ -99,13 +99,13 @@ class UrlHelper
      *
      * UrlHelper::getHostWithScheme('https://aaa.bbb.ccc:9090/path?arg=value#anchor');  // returns 'https://aaa.bbb.ccc'
      *
-     * @param string $sUrl
+     * @param string|null $sUrl
      *
      * @return string
      */
     public static function getHostWithScheme(?string $sUrl = ''): string
     {
-        if ('' === $sUrl || \is_null($sUrl)) {
+        if (null === $sUrl || '' === $sUrl) {
             return '';
         }
 
@@ -119,18 +119,50 @@ class UrlHelper
      *
      * UrlHelper::getHostWithSchemeAndPath('https://aaa.bbb.ccc:9090/path?arg=value#anchor');  // returns 'https://aaa.bbb.ccc/path'
      *
-     * @param string $sUrl
+     * @param string|null $sUrl
      *
      * @return string
      */
     public static function getHostWithSchemeAndPath(?string $sUrl = ''): string
     {
-        if ('' === $sUrl || \is_null($sUrl)) {
+        if (null === $sUrl || '' === $sUrl) {
             return '';
         }
 
         $aParsedUrl = \parse_url(\trim($sUrl));
 
         return $aParsedUrl['scheme'] . '://' . ($aParsedUrl['host'] ? $aParsedUrl['host'] . $aParsedUrl['path'] : \array_shift(\explode('/', $aParsedUrl['path'], 2)));
+    }
+
+    /**
+     * base64 variant encoding with replace characters (=+/) in result string
+     *
+     * @param string|null $sUrl string to encode
+     *
+     * @return string encoded base64url string
+     */
+    public static function base64EncodeUrl(?string $sUrl = ''): string
+    {
+        if (null === $sUrl || '' === $sUrl) {
+            return '';
+        }
+
+        return \str_replace(['+', '/', '='], ['-', '_', ''], \base64_encode($sUrl));
+    }
+
+    /**
+     * base64 variant decoding with replace characters (-_) in result string
+     *
+     * @param string|null $sUrl string to decode
+     *
+     * @return string decoded base64url string
+     */
+    public static function base64DecodeUrl(?string $sUrl = ''): string
+    {
+        if (null === $sUrl || '' === $sUrl) {
+            return '';
+        }
+
+        return \base64_decode(\str_replace(['-', '_'], ['+', '/'], $sUrl));
     }
 }

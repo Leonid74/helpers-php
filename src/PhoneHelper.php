@@ -57,7 +57,7 @@ class PhoneHelper
      * Функция принимает телефонный номер в произвольном формате и возвращает телефонный
      * номер в формате +7xxxxxxxxxx или false, если входной номер телефона не проходит проверку валидности.
      *
-     * @param string $sString
+     * @param string|null $string
      *
      * @return bool|string
      *
@@ -65,25 +65,25 @@ class PhoneHelper
      *
      * @edit   Leonid Sheikman (leonid74)
      */
-    public static function getValidRusPhone(?string $sString = '')
+    public static function getValidRusPhone(?string $string = '')
     {
-        if ('' === $sString || \is_null($sString)) {
+        if (null === $string || '' === $string) {
             return false;
         }
 
-        $sString = \preg_replace('#[^0-9+]+#uis', '', \trim((string) $sString));
+        $string = \preg_replace('#[^0-9+]+#uis', '', \trim((string) $string));
 
-        if (!\preg_match('#^(?:\\+?7|8|)(.*?)$#uis', $sString, $aTmp)) {
+        if (!\preg_match('#^(?:\\+?7|8|)(.*?)$#uis', $string, $aTmp)) {
             return false;
         }
 
-        $sString = '+7' . \preg_replace('#[^0-9]+#uis', '', $aTmp[1]);
+        $string = '+7' . \preg_replace('#[^0-9]+#uis', '', $aTmp[1]);
 
-        if (!\preg_match('#^\\+7[0-9]{10}$#uis', $sString, $aTmp)) {
+        if (!\preg_match('#^\\+7[0-9]{10}$#uis', $string, $aTmp)) {
             return false;
         }
 
-        return $sString;
+        return $string;
     }
 
     /**
@@ -91,20 +91,20 @@ class PhoneHelper
      *
      * Проверка номера телефона на существование через sms.ru
      *
-     * @param string $sString
+     * @param string $string
      * @param string $apiToken
      * @param string $apiSmsId API Key to SMS.RU
      *
      * @return stdClass()
      */
-    public static function isPhoneExist(string $sString, string $apiToken)
+    public static function isPhoneExist(string $string, string $apiToken)
     {
         $oResult               = new \stdClass();
-        $oResult->phone        = $sString;
+        $oResult->phone        = $string;
         $oResult->phone_exists = 'unknown';
         $oResult->is_error     = false;
 
-        if (empty($sString)) {
+        if (empty($string)) {
             $oResult->phone_exists = false;
 
             return $oResult;
@@ -115,7 +115,7 @@ class PhoneHelper
             $i = 1;
             do {
                 $json = \json_decode(
-                    \file_get_contents("https://sms.ru/sms/cost?api_id={$apiToken}&to={$sString}&msg=" . \urlencode('Test' . \microtime(true)) . '&json=1')
+                    \file_get_contents("https://sms.ru/sms/cost?api_id={$apiToken}&to={$string}&msg=" . \urlencode('Test' . \microtime(true)) . '&json=1')
                 );
 
                 if ((\json_last_error() === JSON_ERROR_NONE) && $json) {

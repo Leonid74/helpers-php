@@ -114,7 +114,7 @@ class StringHelper
     // @codingStandardsIgnoreLine
     public static function mb_strlen(?string $string = ''): int
     {
-        if ('' === $string || \is_null($string)) {
+        if (null === $string || '' === $string) {
             return 0;
         }
 
@@ -124,10 +124,10 @@ class StringHelper
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_strtolower(?string $string = '', ?string $sDefault = ''): string
+    public static function mb_strtolower(?string $string = '', ?string $default = ''): string
     {
-        if ('' === $string || \is_null($string)) {
-            return $sDefault;
+        if (null === $string || '' === $string) {
+            return $default;
         }
 
         return \function_exists('mb_strtolower')
@@ -136,10 +136,10 @@ class StringHelper
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_strtoupper(?string $string = '', ?string $sDefault = ''): string
+    public static function mb_strtoupper(?string $string = '', ?string $default = ''): string
     {
-        if ('' === $string || \is_null($string)) {
-            return $sDefault;
+        if (null === $string || '' === $string) {
+            return $default;
         }
 
         return \function_exists('mb_strtoupper')
@@ -148,20 +148,20 @@ class StringHelper
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_ucfirst(?string $string = '', ?string $sDefault = ''): string
+    public static function mb_ucfirst(?string $string = '', ?string $default = ''): string
     {
-        if ('' === $string || \is_null($string)) {
-            return $sDefault;
+        if (null === $string || '' === $string) {
+            return $default;
         }
 
         return self::mb_strtoupper(self::mb_substr($string, 0, 1)) . self::mb_substr($string, 1);
     }
 
     // @codingStandardsIgnoreLine
-    public static function mb_convert_case(?string $string = '', ?string $sDefault = ''): string
+    public static function mb_convert_case(?string $string = '', ?string $default = ''): string
     {
-        if ('' === $string || \is_null($string)) {
-            return $sDefault;
+        if (null === $string || '' === $string) {
+            return $default;
         }
 
         return \function_exists('mb_convert_case')
@@ -170,50 +170,50 @@ class StringHelper
     }
 
     // @codingStandardsIgnoreLine
-    public static function htmlspecialchars(?string $string = '', ?string $sDefault = ''): string
+    public static function htmlspecialchars(?string $string = '', ?string $default = ''): string
     {
-        if ('' === $string || \is_null($string)) {
-            return $sDefault;
+        if (null === $string || '' === $string) {
+            return $default;
         }
 
         return \htmlspecialchars($string, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, static::$defaultEncoding);
     }
 
     // @codingStandardsIgnoreLine
-    public static function htmlspecialchars_decode(?string $string = '', ?string $sDefault = ''): string
+    public static function htmlspecialchars_decode(?string $string = '', ?string $default = ''): string
     {
-        if ('' === $string || \is_null($string)) {
-            return $sDefault;
+        if (null === $string || '' === $string) {
+            return $default;
         }
 
         return \htmlspecialchars_decode($string, ENT_COMPAT | ENT_HTML5);
     }
 
     // @codingStandardsIgnoreLine
-    public static function htmlentities(?string $string = '', ?string $sDefault = ''): string
+    public static function htmlentities(?string $string = '', ?string $default = ''): string
     {
-        if ('' === $string || \is_null($string)) {
-            return $sDefault;
+        if (null === $string || '' === $string) {
+            return $default;
         }
 
         return \htmlentities($string, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, static::$defaultEncoding);
     }
 
     // @codingStandardsIgnoreLine
-    public static function html_entity_decode(?string $string = '', ?string $sDefault = ''): string
+    public static function html_entity_decode(?string $string = '', ?string $default = ''): string
     {
-        if ('' === $string || \is_null($string)) {
-            return $sDefault;
+        if (null === $string || '' === $string) {
+            return $default;
         }
 
         return \html_entity_decode($string, ENT_COMPAT | ENT_HTML5, static::$defaultEncoding);
     }
 
     // @codingStandardsIgnoreLine
-    public static function utf8_urldecode(?string $string = '', ?string $sDefault = ''): string
+    public static function utf8_urldecode(?string $string = '', ?string $default = ''): string
     {
-        if ('' === $string || \is_null($string)) {
-            return $sDefault;
+        if (null === $string || '' === $string) {
+            return $default;
         }
 
         $string = \preg_replace('/%u([0-9a-f]{3,4})/i', '&#x\\1;', \urldecode($string));
@@ -226,18 +226,18 @@ class StringHelper
      *
      * Добавление BOM в начало строки
      *
-     * @param string $sString
-     * @param string $sDefault
+     * @param string $string
+     * @param string $default
      *
      * @return string
      */
-    public static function addBOM(?string $sString = '', ?string $sDefault = ''): string
+    public static function addBOM(?string $string = '', ?string $default = ''): string
     {
-        if ('' === $sString || \is_null($sString)) {
-            return $sDefault;
+        if (null === $string || '' === $string) {
+            return $default;
         }
 
-        return \chr(0xEF) . \chr(0xBB) . \chr(0xBF) . $sString;
+        return \chr(0xEF) . \chr(0xBB) . \chr(0xBF) . $string;
     }
 
     /**
@@ -245,18 +245,18 @@ class StringHelper
      *
      * Удаление BOM из начала строки
      *
-     * @param string $sString
-     * @param string $sDefault
+     * @param string $string
+     * @param string $default
      *
      * @return string
      */
-    public static function removeBOM(?string $sString = '', ?string $sDefault = ''): string
+    public static function removeBOM(?string $string = '', ?string $default = ''): string
     {
-        if ('' === $sString || \is_null($sString)) {
-            return $sDefault;
+        if (null === $string || '' === $string) {
+            return $default;
         }
 
-        return 0 === \strncasecmp(\pack('CCC', 0xEF, 0xBB, 0xBF), $sString, 3) ? \mb_substr($sString, 3) : $sString;
+        return 0 === \strncasecmp(\pack('CCC', 0xEF, 0xBB, 0xBF), $string, 3) ? \mb_substr($string, 3) : $string;
     }
 
     /**
@@ -264,18 +264,18 @@ class StringHelper
      *
      * Замена <br> на \n.
      *
-     * @param string $sString
-     * @param string $sDefault
+     * @param string $string
+     * @param string $default
      *
      * @return string
      */
-    public static function br2nl(?string $sString = '', ?string $sDefault = ''): string
+    public static function br2nl(?string $string = '', ?string $default = ''): string
     {
-        if ('' === $sString || \is_null($sString)) {
-            return $sDefault;
+        if (null === $string || '' === $string) {
+            return $default;
         }
 
-        return \preg_replace('/\<br(\s*)?\/?\>/i', "\n", $sString);
+        return \preg_replace('/\<br(\s*)?\/?\>/i', "\n", $string);
     }
 
     /**
@@ -286,24 +286,24 @@ class StringHelper
      * StringHelper::truncateString('Lorem ipsum inum', 10);         // returns 'Lorem i...'
      * StringHelper::truncateString('Lorem ipsum inum', 15, '>>>');  // returns 'Lorem ipsum >>>'
      *
-     * @param string $sString
+     * @param string $string
      * @param int    $iLength  (defaults to 100)
      * @param string $sSuffix  (optional, defaults to '...')
-     * @param string $sDefault
+     * @param string $default
      *
      * @return string
      */
-    public static function truncateString(?string $sString = '', ?int $iLength = 100, ?string $sSuffix = '...', ?string $sDefault = ''): string
+    public static function truncateString(?string $string = '', ?int $iLength = 100, ?string $sSuffix = '...', ?string $default = ''): string
     {
-        if ('' === $sString || \is_null($sString)) {
-            return $sDefault;
+        if (null === $string || '' === $string) {
+            return $default;
         }
 
-        if ($iLength <= 0 || \mb_strlen($sString) <= $iLength) {
-            return $sString;
+        if ($iLength <= 0 || \mb_strlen($string) <= $iLength) {
+            return $string;
         }
 
-        return \mb_substr($sString, 0, $iLength - \mb_strlen($sSuffix)) . $sSuffix;
+        return \mb_substr($string, 0, $iLength - \mb_strlen($sSuffix)) . $sSuffix;
     }
 
     /**
@@ -385,24 +385,24 @@ class StringHelper
      *
      * Проверка, закодирована ли строка в формате Base64
      *
-     * @param ?string $sString
+     * @param ?string $string
      * @param array   $enc
      * @param string  $data
      *
      * @return bool
      */
-    public static function isBase64Encoded(?string $sString = '', ?array $enc = ['UTF-8', 'ASCII']): bool
+    public static function isBase64Encoded(?string $string = '', ?array $enc = ['UTF-8', 'ASCII']): bool
     {
-        if ('' === $sString || \is_null($sString)) {
+        if (null === $string || '' === $string) {
             return false;
         }
 
         try {
-            if (!\preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $sString)) {
+            if (!\preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $string)) {
                 return false;
             }
 
-            $sDecoded = \base64_decode($sString, true);
+            $sDecoded = \base64_decode($string, true);
             if (false === $sDecoded) {
                 return false;
             }
@@ -422,18 +422,18 @@ class StringHelper
      *
      * Возвращает транслитерированную строку (исходно содержащую символы á é ò и т.п.), содержащую только латинские символы
      *
-     * @param string $sString
-     * @param string $sDefault
+     * @param string $string
+     * @param string $default
      *
      * @return string
      */
-    public static function toLatinString(?string $sString = '', ?string $sDefault = ''): string
+    public static function toLatinString(?string $string = '', ?string $default = ''): string
     {
-        if ('' === $sString || \is_null($sString)) {
-            return $sDefault;
+        if (null === $string || '' === $string) {
+            return $default;
         }
 
-        return \transliterator_transliterate('Any-Latin; Latin-ASCII; [\u0180-\u7fff] remove', $sString);
+        return \transliterator_transliterate('Any-Latin; Latin-ASCII; [\u0180-\u7fff] remove', $string);
     }
 
     /**
@@ -447,22 +447,22 @@ class StringHelper
      *  - двойные пробелы заменяются на один
      *  - удаляются пробелы в начале и конце строки
      *
-     * @param string $sString
-     * @param string $sDefault
+     * @param string $string
+     * @param string $default
      *
      * @return string
      */
-    public static function minClean(?string $sString = '', ?string $sDefault = ''): string
+    public static function minClean(?string $string = '', ?string $default = ''): string
     {
-        if ('' === $sString || \is_null($sString)) {
-            return $sDefault;
+        if (null === $string || '' === $string) {
+            return $default;
         }
 
-        $sString = \str_ireplace(["\0", '\\a', '\\b', "\v", "\e", "\f", "\t", "\r", "\n"], ' ', $sString);
-        $sString = \preg_replace('/[\s]{2,}/', ' ', $sString);
-        $sString = \trim($sString);
+        $string = \str_ireplace(["\0", '\\a', '\\b', "\v", "\e", "\f", "\t", "\r", "\n"], ' ', $string);
+        $string = \preg_replace('/[\s]{2,}/', ' ', $string);
+        $string = \trim($string);
 
-        return (0 == \mb_strlen($sString, static::$defaultEncoding)) ? $sDefault : $sString;
+        return (0 == \mb_strlen($string, static::$defaultEncoding)) ? $default : $string;
     }
 
     /**
@@ -600,30 +600,30 @@ class StringHelper
      * the string is trimmed up to the previous word. If no spaces are found within
      * the limit, or if the first word exceeds the limit, an empty string is returned.
      *
-     * @param string|null $sString   the input string to be trimmed
+     * @param string|null $string    the input string to be trimmed
      * @param int         $maxLength the maximum allowed length of the output string
-     * @param string      $sDefault  default value
+     * @param string      $default  default value
      *
      * @return string the trimmed string with preserved last word integrity up to maxLength
      */
-    public static function trimStringToLastWord(?string $sString = '', int $maxLength = 0, string $sDefault = ''): string
+    public static function trimStringToLastWord(?string $string = '', int $maxLength = 0, string $default = ''): string
     {
-        if ('' === $sString || null === $sString || 0 == $maxLength) {
-            return $sDefault;
+        if (null === $string || '' === $string || 0 == $maxLength) {
+            return $default;
         }
 
-        $sString = \trim($sString);
+        $string = \trim($string);
 
         // Return the original string if it is within maxLength.
-        if (static::mb_strlen($sString) <= $maxLength) {
-            return $sString;
+        if (static::mb_strlen($string) <= $maxLength) {
+            return $string;
         }
 
         // Trim the string to maxLength first to see if we're cutting through a word.
-        $trimmedString = static::mb_substr($sString, 0, $maxLength);
+        $trimmedString = static::mb_substr($string, 0, $maxLength);
 
         // Check if we are on a space or just passed one; if so, we can return early.
-        if ($sString[$maxLength] == ' ' || $sString[$maxLength - 1] == ' ') {
+        if ($string[$maxLength] == ' ' || $string[$maxLength - 1] == ' ') {
             return \rtrim($trimmedString);
         }
 
@@ -632,11 +632,41 @@ class StringHelper
 
         // If there's no space at all, return an empty string as we cannot preserve any word.
         if ($lastSpacePosition === false) {
-            return $sDefault;
+            return $default;
         }
 
         // Return substring up to the last found space position.
         return static::mb_substr($trimmedString, 0, $lastSpacePosition);
+    }
+
+    /**
+     * Split string with full name (LFS) into 3 parts, remove multiple spaces.
+     *
+     * Разбиваем строку с ФИО на 3 части, удаляем множественные пробелы.
+     *
+     * @param string|null $string string with full name
+     *
+     * @return array
+     *
+     * @author Leonid Sheikman <leonid@sheikman.ru>
+     */
+    public function splitFullname(?string $string = ''): array
+    {
+        if (null === $string || '' === $string) {
+            return [];
+        }
+
+        $dataRaw = \explode(' ', \trim(\preg_replace('/[\s]{2,}/', ' ', $string)));
+        $data    = [
+            'lastname'   => $dataRaw[0] ?? '',
+            'firstname'  => $dataRaw[1] ?? '',
+            'secondname' => $dataRaw[2] ?? '',
+        ];
+        $data['fullname_lfs'] = $data['lastname'] . ($data['firstname'] ? ' ' . $data['firstname'] : '') . ($data['secondname'] ? ' ' . $data['secondname'] : '');
+        $data['fullname_lf']  = $data['lastname'] . ($data['firstname'] ? ' ' . $data['firstname'] : '');
+        $data['fullname_fl']  = $data['firstname'] . ($data['lastname'] ? ' ' . $data['lastname'] : '');
+
+        return $data;
     }
 
     /**
