@@ -6,7 +6,7 @@
  * Вспомогательный класс для обработки строк
  *
  * @author Leonid Sheikman (leonid74)
- * @copyright 2019-2022 Leonid Sheikman
+ * @copyright 2019-2024 Leonid Sheikman
  *
  * @see https://github.com/Leonid74/helpers-php
  *

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Helper class for processing URL/URI strings
@@ -6,7 +6,8 @@
  * This file is part of the project.
  *
  * @author Leonid Sheikman (leonid74)
- * @copyright 2019-2021 Leonid Sheikman
+ * @copyright 2019-2024 Leonid Sheikman
+ *
  * @see https://github.com/Leonid74/helpers-php
  *
  * For the full copyright and license information, please view the LICENSE
@@ -27,13 +28,13 @@ class UrlHelper
      *
      * @return string
      */
-    public static function addTrailingSlash( ?string $sUrl = '' ): string
+    public static function addTrailingSlash(?string $sUrl = ''): string
     {
-        if ( '' === $sUrl || \is_null( $sUrl ) ) {
+        if ('' === $sUrl || \is_null($sUrl)) {
             return '/';
         }
 
-        return \rtrim( $sUrl, '/' ) . '/';
+        return \rtrim($sUrl, '/') . '/';
     }
 
     /**
@@ -45,13 +46,13 @@ class UrlHelper
      *
      * @return string
      */
-    public static function removeTrailingSlash( ?string $sUrl = '' ): string
+    public static function removeTrailingSlash(?string $sUrl = ''): string
     {
-        if ( '' === $sUrl || \is_null( $sUrl ) ) {
+        if ('' === $sUrl || \is_null($sUrl)) {
             return '';
         }
 
-        return \rtrim( $sUrl, '/' );
+        return \rtrim($sUrl, '/');
     }
 
     /**
@@ -64,13 +65,13 @@ class UrlHelper
      *
      * @return string
      */
-    public static function prependSlash( ?string $sUrl = '' ): string
+    public static function prependSlash(?string $sUrl = ''): string
     {
-        if ( '' === $sUrl || \is_null( $sUrl ) ) {
+        if ('' === $sUrl || \is_null($sUrl)) {
             return '/';
         }
 
-        return '/' . \ltrim( $sUrl, '/' );
+        return '/' . \ltrim($sUrl, '/');
     }
 
     /**
@@ -82,15 +83,15 @@ class UrlHelper
      *
      * @return string
      */
-    public static function getHostOnly( ?string $sUrl = '' ): string
+    public static function getHostOnly(?string $sUrl = ''): string
     {
-        if ( '' === $sUrl || \is_null( $sUrl ) ) {
+        if ('' === $sUrl || \is_null($sUrl)) {
             return '';
         }
 
-        $aParsedUrl = \parse_url( \trim( $sUrl ) );
+        $aParsedUrl = \parse_url(\trim($sUrl));
 
-        return $aParsedUrl['host'] ? $aParsedUrl['host'] : \array_shift( \explode( '/', $aParsedUrl['path'], 2 ) );
+        return $aParsedUrl['host'] ? $aParsedUrl['host'] : \array_shift(\explode('/', $aParsedUrl['path'], 2));
     }
 
     /**
@@ -102,15 +103,15 @@ class UrlHelper
      *
      * @return string
      */
-    public static function getHostWithScheme( ?string $sUrl = '' ): string
+    public static function getHostWithScheme(?string $sUrl = ''): string
     {
-        if ( '' === $sUrl || \is_null( $sUrl ) ) {
+        if ('' === $sUrl || \is_null($sUrl)) {
             return '';
         }
 
-        $aParsedUrl = \parse_url( \trim( $sUrl ) );
+        $aParsedUrl = \parse_url(\trim($sUrl));
 
-        return $aParsedUrl['scheme'] . '://' . ( $aParsedUrl['host'] ? $aParsedUrl['host'] : \array_shift( \explode( '/', $aParsedUrl['path'], 2 ) ) );
+        return $aParsedUrl['scheme'] . '://' . ($aParsedUrl['host'] ? $aParsedUrl['host'] : \array_shift(\explode('/', $aParsedUrl['path'], 2)));
     }
 
     /**
@@ -122,14 +123,14 @@ class UrlHelper
      *
      * @return string
      */
-    public static function getHostWithSchemeAndPath( ?string $sUrl = '' ): string
+    public static function getHostWithSchemeAndPath(?string $sUrl = ''): string
     {
-        if ( '' === $sUrl || \is_null( $sUrl ) ) {
+        if ('' === $sUrl || \is_null($sUrl)) {
             return '';
         }
 
-        $aParsedUrl = \parse_url( \trim( $sUrl ) );
+        $aParsedUrl = \parse_url(\trim($sUrl));
 
-        return $aParsedUrl['scheme'] . '://' . ( $aParsedUrl['host'] ? $aParsedUrl['host'] . $aParsedUrl['path'] : \array_shift( \explode( '/', $aParsedUrl['path'], 2 ) ) );
+        return $aParsedUrl['scheme'] . '://' . ($aParsedUrl['host'] ? $aParsedUrl['host'] . $aParsedUrl['path'] : \array_shift(\explode('/', $aParsedUrl['path'], 2)));
     }
 }

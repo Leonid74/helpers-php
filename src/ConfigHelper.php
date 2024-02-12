@@ -1,4 +1,4 @@
-<?php declare( strict_types=1 );
+<?php declare(strict_types=1);
 
 /**
  * Helper class for working with configs.
@@ -10,8 +10,10 @@
  * Встроенная поддержка файлов PHP, INI и JSON.
  *
  * @author Leonid Sheikman (leonid74)
- * @copyright 2019-2022 Leonid Sheikman
+ * @copyright 2019-2024 Leonid Sheikman
+ *
  * @see https://github.com/Leonid74/helpers-php
+ *
  * @uses parts of code (https://github.com/xy2z/LiteConfig)
  *
  * This file is part of the project.
@@ -29,14 +31,14 @@ class ConfigHelper
     /**
      * Argument used in file_parse_ini()
      *
-     * @var boolean
+     * @var bool
      */
     public static $iniProcessSections = true;
 
     /**
      * Argument used in file_parse_ini()
      *
-     * @var integer
+     * @var int
      */
     public static $iniScannerMode = INI_SCANNER_TYPED;
 
@@ -50,56 +52,56 @@ class ConfigHelper
     /**
      * Load config file
      *
-     * @param string $sPath Path to file
-     * @param boolean $bPrefixFilename Prefix the key with the filename
-     * @param string $sPrefixCustom Prefix the key
+     * @param string $sPath           Path to file
+     * @param bool   $bPrefixFilename Prefix the key with the filename
+     * @param string $sPrefixCustom   Prefix the key
      *
      * @return void
      */
-    public static function loadFile( string $sPath, ?bool $bPrefixFilename = false, ?string $sPrefixCustom = null ): void
+    public static function loadFile(string $sPath, ?bool $bPrefixFilename = false, ?string $sPrefixCustom = null): void
     {
-        $aPathinfo = \pathinfo( $sPath );
+        $aPathinfo = \pathinfo($sPath);
 
         // Add prefix
         $sPrefix = $bPrefixFilename ? $aPathinfo['filename'] : null;
 
-        if ( $sPrefixCustom !== null ) {
+        if ($sPrefixCustom !== null) {
             $sPrefix = $sPrefixCustom . '.' . $sPrefix;
         }
 
         // Load file content
-        $mixContent = self::getFileContent( $sPath, $aPathinfo );
-        self::loadArray( $mixContent, $sPrefix );
+        $mixContent = self::getFileContent($sPath, $aPathinfo);
+        self::loadArray($mixContent, $sPrefix);
     }
 
     /**
      * Load an array into the config
      *
-     * @param array $aData Data to load.
+     * @param array  $aData   data to load
      * @param string $sPrefix Prefix the keys (optional)
      *
      * @return void
      */
-    public static function loadArray( array $aData, ?string $sPrefix = null ): void
+    public static function loadArray(array $aData, ?string $sPrefix = null): void
     {
-        foreach ( $aData as $key => $val ) {
-            if ( $sPrefix !== null ) {
+        foreach ($aData as $key => $val) {
+            if ($sPrefix !== null) {
                 $key = $sPrefix . '.' . $key;
             }
 
-            self::set( $key, $val );
+            self::set($key, $val);
         }
     }
 
     /**
      * Get the data from the config by key
      *
-     * @param string $key Key
-     * @param mixed $default default value
+     * @param string $key     Key
+     * @param mixed  $default default value
      *
      * @return mixed Value
      */
-    public static function get( string $key, $default = null )
+    public static function get(string $key, $default = null)
     {
         return static::$aData[$key] ?? $default;
     }
@@ -121,9 +123,9 @@ class ConfigHelper
      *
      * @return bool
      */
-    public static function hasKey( string $key ): bool
+    public static function hasKey(string $key): bool
     {
-        return isset( self::$aData[$key] );
+        return isset(self::$aData[$key]);
     }
 
     /**
@@ -131,57 +133,59 @@ class ConfigHelper
      *
      * @see hasKey
      *
+     * @param string $key
+     *
      * @return bool
      */
-    public static function exists( string $key ): bool
+    public static function exists(string $key): bool
     {
-        return self::hasKey( $key );
+        return self::hasKey($key);
     }
 
     /**
      * Get file content as php array
      *
-     * @param string $sPath Path to file
-     * @param array $aPathinfo pathinfo() array
+     * @param string $sPath     Path to file
+     * @param array  $aPathinfo pathinfo() array
      *
      * @return array
      */
-    protected static function getFileContent( string $sPath, array $aPathinfo ): array
+    protected static function getFileContent(string $sPath, array $aPathinfo): array
     {
-        switch ( $aPathinfo['extension'] ) {
+        switch ($aPathinfo['extension']) {
             case 'php':
-                $aOptions = require( $sPath );
-                break;
+                $aOptions = require $sPath;
 
+                break;
             case 'ini':
-                $aOptions = \parse_ini_file( $sPath, static::$iniProcessSections, static::$iniScannerMode );
-                break;
+                $aOptions = \parse_ini_file($sPath, static::$iniProcessSections, static::$iniScannerMode);
 
+                break;
             case 'json':
-                $aOptions = \json_decode( \file_get_contents( $sPath ), true );
-                break;
+                $aOptions = \json_decode(\file_get_contents($sPath), true);
 
+                break;
             default:
-                throw new \Exception( 'Unsupported filetype: ' . $aPathinfo['extension'] );
+                throw new \Exception('Unsupported filetype: ' . $aPathinfo['extension']);
         }
 
-        return \is_array( $aOptions ) ? $aOptions : [];
+        return \is_array($aOptions) ? $aOptions : [];
     }
 
     /**
      * Set the data to the config
      *
-     * @param string $key Key name
-     * @param mixed $value Value
+     * @param string $key   Key name
+     * @param mixed  $value Value
      *
      * @return void
      */
-    protected static function set( string $key, $value ): void
+    protected static function set(string $key, $value): void
     {
-        if ( \is_array( $value ) ) {
-            foreach ( $value as $key2 => $val2 ) {
+        if (\is_array($value)) {
+            foreach ($value as $key2 => $val2) {
                 $key_path = $key . '.' . $key2;
-                self::set( $key_path, $val2 );
+                self::set($key_path, $val2);
             }
         }
 

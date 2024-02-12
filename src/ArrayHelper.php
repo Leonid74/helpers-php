@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Helper class for processing arrays
@@ -6,7 +6,8 @@
  * Вспомогательный класс для обработки массивов
  *
  * @author Leonid Sheikman (leonid74)
- * @copyright 2019-2022 Leonid Sheikman
+ * @copyright 2019-2024 Leonid Sheikman
+ *
  * @see https://github.com/Leonid74/helpers-php
  *
  * This file is part of the project.
@@ -42,18 +43,18 @@ class ArrayHelper
     ): bool {
         $result = false;
 
-        if ( !empty( $mNeedle ) && !empty( $aHaystack ) ) {
-            foreach ( $aHaystack as $key => $mItem ) {
-                $result = $bCaseInsensitive ? \mb_strtolower( $mNeedle ) == \mb_strtolower( $key ) : (string) $mNeedle == (string) $key;
+        if (!empty($mNeedle) && !empty($aHaystack)) {
+            foreach ($aHaystack as $key => $mItem) {
+                $result = $bCaseInsensitive ? \mb_strtolower($mNeedle) == \mb_strtolower($key) : (string) $mNeedle == (string) $key;
 
-                if ( $result ) {
+                if ($result) {
                     break;
                 }
 
-                if ( $bProcessSubarrays && \is_array( $mItem ) ) {
-                    $result = self::arrayKeyExists( $mNeedle, $mItem, $bCaseInsensitive, $bProcessSubarrays );
+                if ($bProcessSubarrays && \is_array($mItem)) {
+                    $result = self::arrayKeyExists($mNeedle, $mItem, $bCaseInsensitive, $bProcessSubarrays);
 
-                    if ( $result ) {
+                    if ($result) {
                         break;
                     }
                 }
@@ -85,22 +86,22 @@ class ArrayHelper
     ): bool {
         $result = false;
 
-        if ( !empty( $mNeedle ) && !empty( $aHaystack ) ) {
-            foreach ( $aHaystack as $mItem ) {
-                if ( \is_array( $mItem ) ) {
-                    if ( !$bProcessSubarrays ) {
+        if (!empty($mNeedle) && !empty($aHaystack)) {
+            foreach ($aHaystack as $mItem) {
+                if (\is_array($mItem)) {
+                    if (!$bProcessSubarrays) {
                         continue;
                     }
-                    $result = self::arrayValueExists( $mNeedle, $mItem, $bCaseInsensitive, $bProcessSubarrays, $bStrictTypes );
+                    $result = self::arrayValueExists($mNeedle, $mItem, $bCaseInsensitive, $bProcessSubarrays, $bStrictTypes);
                 } else {
-                    if ( $bCaseInsensitive ) {
-                        $result = $bStrictTypes ? ( \gettype( $mNeedle ) == \gettype( $mItem ) && \mb_strtolower( $mNeedle ) == \mb_strtolower( $mItem ) ) : \mb_strtolower( $mNeedle ) == \mb_strtolower( $mItem );
+                    if ($bCaseInsensitive) {
+                        $result = $bStrictTypes ? (\gettype($mNeedle) == \gettype($mItem) && \mb_strtolower($mNeedle) == \mb_strtolower($mItem)) : \mb_strtolower($mNeedle) == \mb_strtolower($mItem);
                     } else {
                         $result = $bStrictTypes ? $mNeedle === $mItem : (string) $mNeedle == (string) $mItem;
                     }
                 }
 
-                if ( $result ) {
+                if ($result) {
                     break;
                 }
             }
@@ -116,7 +117,7 @@ class ArrayHelper
      *
      * @param string $sHaystack
      * @param array  $aNeedles
-     * @param int    $iOffset  (optional, defaults to 0)
+     * @param int    $iOffset          (optional, defaults to 0)
      * @param bool   $bCaseInSensitive (optional, defaults to false)
      *
      * @return bool
@@ -127,9 +128,9 @@ class ArrayHelper
         ?int $iOffset = 0,
         ?bool $bCaseInSensitive = false
     ): bool {
-        if ( !empty( $aNeedles ) && !empty( $sHaystack ) ) {
-            foreach ( $aNeedles as $needle ) {
-                if ( ( $bCaseInSensitive ? \stripos( $sHaystack, $needle, $iOffset ) : \strpos( $sHaystack, $needle, $iOffset ) ) !== false ) {
+        if (!empty($aNeedles) && !empty($sHaystack)) {
+            foreach ($aNeedles as $needle) {
+                if (($bCaseInSensitive ? \stripos($sHaystack, $needle, $iOffset) : \strpos($sHaystack, $needle, $iOffset)) !== false) {
                     return true;
                 }
             }
@@ -162,26 +163,27 @@ class ArrayHelper
     ) {
         $result = false;
 
-        if ( !empty( $mNeedle ) && !empty( $aHaystack ) ) {
-            foreach ( $aHaystack as $key => $mItem ) {
-                if ( \is_array( $mItem ) ) {
-                    if ( !$bProcessSubarrays ) {
+        if (!empty($mNeedle) && !empty($aHaystack)) {
+            foreach ($aHaystack as $key => $mItem) {
+                if (\is_array($mItem)) {
+                    if (!$bProcessSubarrays) {
                         continue;
                     }
-                    $result = self::arraySearch( $mNeedle, $mItem, $bCaseInsensitive, $bProcessSubarrays, $bStrictTypes );
+                    $result = self::arraySearch($mNeedle, $mItem, $bCaseInsensitive, $bProcessSubarrays, $bStrictTypes);
 
-                    if ( false !== $result ) {
+                    if (false !== $result) {
                         break;
                     }
                 } else {
-                    if ( $bCaseInsensitive ) {
-                        $result = $bStrictTypes ? ( \gettype( $mNeedle ) == \gettype( $mItem ) && \mb_strtolower( $mNeedle ) == \mb_strtolower( $mItem ) ) : \mb_strtolower( $mNeedle ) == \mb_strtolower( $mItem );
+                    if ($bCaseInsensitive) {
+                        $result = $bStrictTypes ? (\gettype($mNeedle) == \gettype($mItem) && \mb_strtolower($mNeedle) == \mb_strtolower($mItem)) : \mb_strtolower($mNeedle) == \mb_strtolower($mItem);
                     } else {
                         $result = $bStrictTypes ? $mNeedle === $mItem : (string) $mNeedle == (string) $mItem;
                     }
 
-                    if ( false !== $result ) {
+                    if (false !== $result) {
                         $result = $key;
+
                         break;
                     }
                 }
@@ -200,7 +202,7 @@ class ArrayHelper
      *
      * @param mixed $mNeedle
      * @param array $aHaystack
-     * @param bool  $bCaseInsensitive (optional, defaults to false)
+     * @param bool  $bCaseInsensitive  (optional, defaults to false)
      * @param bool  $bProcessSubarrays (optional, defaults to true)
      *
      * @return mixed
@@ -213,20 +215,21 @@ class ArrayHelper
     ) {
         $result = false;
 
-        if ( !empty( $mNeedle ) && !empty( $aHaystack ) ) {
-            foreach ( $aHaystack as $key => $mItem ) {
-                if ( \is_array( $mItem ) ) {
-                    if ( !$bProcessSubarrays ) {
+        if (!empty($mNeedle) && !empty($aHaystack)) {
+            foreach ($aHaystack as $key => $mItem) {
+                if (\is_array($mItem)) {
+                    if (!$bProcessSubarrays) {
                         continue;
                     }
-                    $result = self::arrayStrPos( $mNeedle, $mItem, $bCaseInsensitive, $bProcessSubarrays );
+                    $result = self::arrayStrPos($mNeedle, $mItem, $bCaseInsensitive, $bProcessSubarrays);
 
-                    if ( false !== $result ) {
+                    if (false !== $result) {
                         break;
                     }
                 } else {
-                    if ( false !== ( $bCaseInsensitive ? \mb_stripos( $mItem, $mNeedle ) : \mb_strpos( $mItem, $mNeedle ) ) ) {
+                    if (false !== ($bCaseInsensitive ? \mb_stripos($mItem, $mNeedle) : \mb_strpos($mItem, $mNeedle))) {
                         $result = $key;
+
                         break;
                     }
                 }
@@ -243,14 +246,14 @@ class ArrayHelper
      * Массив объединённый в строку (к примеру, для сохранения в CSV).
      * Вложенные подмассивы будут также объединены в строку с разделителем subseparator.
      *
-     * @param array $aHaystack
+     * @param array  $aHaystack
      * @param string $default
      * @param string $separator
      * @param string $subseparator
-     * @param bool $isRecursion (service parameter)
+     * @param bool   $isRecursion  (service parameter)
      *
      * @return string converted array to string
-    */
+     */
     public static function arrayToCsvString(
         array $aHaystack,
         ?string $default = '',
@@ -258,18 +261,18 @@ class ArrayHelper
         ?string $subseparator = '|',
         ?bool $isRecursion = false
     ): string {
-        if ( empty( $aHaystack ) ) {
+        if (empty($aHaystack)) {
             return $default;
         }
 
         $separator = $isRecursion ? $separator : '"' . $separator . '"';
 
         $res = [];
-        foreach ( $aHaystack as $row ) {
-            $res[] = \is_array( $row ) ? \trim( self::arrayToCsvString( $row, $default, $subseparator, '||', true ), "\"\n\r" ) : \trim( $row );
+        foreach ($aHaystack as $row) {
+            $res[] = \is_array($row) ? \trim(self::arrayToCsvString($row, $default, $subseparator, '||', true), "\"\n\r") : \trim($row);
         }
 
-        return '"' . \implode( $separator, $res ) . '"' . PHP_EOL;
+        return '"' . \implode($separator, $res) . '"' . PHP_EOL;
     }
 
     /**
@@ -277,39 +280,41 @@ class ArrayHelper
      *
      * Превратить Многомерный Массив в одномерный.
      *
-     * @param array $aHaystack
-     * @param string|bool $prefix
+     * @param array       $aHaystack
+     * @param bool|string $prefix
      *
      * @return array
      *
      * @author https://github.com/php-curl-class/php-curl-class
+     *
      * @edit   Leonid Sheikman (leonid74)
      */
     public static function arrayFlattenMulti(
         ?array $aHaystack = [],
-        bool $prefix = false
+        $prefix = false
     ): array {
         $aResult = [];
 
-        if ( $prefix && $aHaystack === null ) {
+        if ($prefix && $aHaystack === null) {
             $aResult[$prefix] = null;
 
             return $aResult;
         }
 
-        if ( $prefix && empty( $aHaystack ) ) {
+        if ($prefix && empty($aHaystack)) {
             $aResult[$prefix] = '';
 
             return $aResult;
         }
 
-        if ( !empty( $aHaystack ) ) {
-            foreach ( $aHaystack as $key => $val ) {
-                if ( \is_scalar( $val ) ) {
-                    $aResult[ $prefix ? $prefix . '[' . $key . ']' : $key ] = $val;
+        if (!empty($aHaystack)) {
+            foreach ($aHaystack as $key => $val) {
+                if (\is_scalar($val)) {
+                    $aResult[$prefix ? $prefix . '[' . $key . ']' : $key] = $val;
+
                     continue;
                 }
-                $aResult = \array_merge( $aResult, self::arrayFlattenMulti( $val, $prefix ? $prefix . '[' . $key . ']' : $key ) );
+                $aResult = \array_merge($aResult, self::arrayFlattenMulti($val, $prefix ? $prefix . '[' . $key . ']' : $key));
             }
         }
 
@@ -333,13 +338,13 @@ class ArrayHelper
         string $func,
         array $aHaystack = []
     ): array {
-        if ( empty( $aHaystack ) ) {
+        if (empty($aHaystack)) {
             return [];
         }
 
         $aResult = [];
-        foreach ( $aHaystack as $key => $value ) {
-            $aResult[$key] = ( \is_array( $value ) ? self::arrayMapRecursive( $func, $value ) : $func( $value ) );
+        foreach ($aHaystack as $key => $value) {
+            $aResult[$key] = (\is_array($value) ? self::arrayMapRecursive($func, $value) : $func($value));
         }
 
         return $aResult;
@@ -352,7 +357,7 @@ class ArrayHelper
      *
      * @param array|string $search
      * @param array|string $replace
-     * @param array $aHaystack
+     * @param array        $aHaystack
      *
      * @return array
      *
@@ -363,9 +368,10 @@ class ArrayHelper
         $replace,
         array $aHaystack = []
     ): array {
-        if ( empty( $aHaystack ) ) {
+        if (empty($aHaystack)) {
             return [];
         }
-        return \json_decode( \str_replace( $search, $replace, \json_encode( $aHaystack, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) ), true );
+
+        return \json_decode(\str_replace($search, $replace, \json_encode($aHaystack, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)), true);
     }
 }
