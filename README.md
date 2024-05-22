@@ -18,7 +18,7 @@ Recommended installation via composer: add `leonid74/helpers-php` to `composer.j
 
     "require": {
        // ...
-       "leonid74/helpers-php": "^1"
+       "leonid74/helpers-php": "^2"
        // ...
     }
 
