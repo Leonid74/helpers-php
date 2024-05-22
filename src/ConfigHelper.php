@@ -29,14 +29,14 @@ namespace Leonid74\Helpers;
 class ConfigHelper
 {
     /**
-     * Argument used in file_parse_ini()
+     * Argument used in parse_ini_file()
      *
      * @var bool
      */
     public static $iniProcessSections = true;
 
     /**
-     * Argument used in file_parse_ini()
+     * Argument used in parse_ini_file()
      *
      * @var int
      */
@@ -47,48 +47,45 @@ class ConfigHelper
      *
      * @var array
      */
-    protected static $aData = [];
+    protected static $data = [];
 
     /**
      * Load config file
      *
-     * @param string $sPath           Path to file
-     * @param bool   $bPrefixFilename Prefix the key with the filename
-     * @param string $sPrefixCustom   Prefix the key
+     * @param string $path           Path to file
+     * @param bool   $prefixFilename Prefix the key with the filename
+     * @param string $prefixCustom   Custom prefix for the key
      *
      * @return void
      */
-    public static function loadFile(string $sPath, ?bool $bPrefixFilename = false, ?string $sPrefixCustom = null): void
+    public static function loadFile(string $path, ?bool $prefixFilename = false, ?string $prefixCustom = null): void
     {
-        $aPathinfo = \pathinfo($sPath);
+        $pathInfo = \pathinfo($path);
 
         // Add prefix
-        $sPrefix = $bPrefixFilename ? $aPathinfo['filename'] : null;
+        $prefix = $prefixFilename ? $pathInfo['filename'] : '';
 
-        if ($sPrefixCustom !== null) {
-            $sPrefix = $sPrefixCustom . '.' . $sPrefix;
+        if ($prefixCustom !== null) {
+            $prefix = $prefixCustom . '.' . $prefix;
         }
 
         // Load file content
-        $mixContent = self::getFileContent($sPath, $aPathinfo);
-        self::loadArray($mixContent, $sPrefix);
+        $content = self::getFileContent($path, $pathInfo);
+        self::loadArray($content, $prefix);
     }
 
     /**
      * Load an array into the config
      *
-     * @param array  $aData   data to load
-     * @param string $sPrefix Prefix the keys (optional)
+     * @param array  $data   Data to load
+     * @param string $prefix Prefix the keys (optional)
      *
      * @return void
      */
-    public static function loadArray(array $aData, ?string $sPrefix = null): void
+    public static function loadArray(array $data, ?string $prefix = null): void
     {
-        foreach ($aData as $key => $val) {
-            if ($sPrefix !== null) {
-                $key = $sPrefix . '.' . $key;
-            }
-
+        foreach ($data as $key => $val) {
+            $key = $prefix ? $prefix . '.' . $key : $key;
             self::set($key, $val);
         }
     }
@@ -97,13 +94,13 @@ class ConfigHelper
      * Get the data from the config by key
      *
      * @param string $key     Key
-     * @param mixed  $default default value
+     * @param mixed  $default Default value
      *
      * @return mixed Value
      */
     public static function get(string $key, $default = null)
     {
-        return static::$aData[$key] ?? $default;
+        return static::$data[$key] ?? $default;
     }
 
     /**
@@ -113,7 +110,7 @@ class ConfigHelper
      */
     public static function all(): array
     {
-        return static::$aData;
+        return static::$data;
     }
 
     /**
@@ -125,7 +122,7 @@ class ConfigHelper
      */
     public static function hasKey(string $key): bool
     {
-        return isset(self::$aData[$key]);
+        return isset(self::$data[$key]);
     }
 
     /**
@@ -133,7 +130,7 @@ class ConfigHelper
      *
      * @see hasKey
      *
-     * @param string $key
+     * @param string $key Key name
      *
      * @return bool
      */
@@ -143,33 +140,65 @@ class ConfigHelper
     }
 
     /**
-     * Get file content as php array
+     * Pack the config file and return the packed configuration.
      *
-     * @param string $sPath     Path to file
-     * @param array  $aPathinfo pathinfo() array
+     * @param string $file Path to the config file
      *
      * @return array
+     *
+     * @throws \RuntimeException
      */
-    protected static function getFileContent(string $sPath, array $aPathinfo): array
+    public static function getPackedConfig(string $file): array
     {
-        switch ($aPathinfo['extension']) {
+        if (empty($file) || !\file_exists($file)) {
+            throw new \InvalidArgumentException('Empty or non-existent config file');
+        }
+
+        $packedFilename = self::getPackedFilename($file);
+
+        if (!\file_exists($packedFilename) || \filemtime($packedFilename) <= \filemtime($file)) {
+            $packedConfig = self::packConfigFile($file);
+            self::writePackedConfig($packedFilename, $packedConfig);
+        }
+
+        $options = require $packedFilename;
+        if (!\is_array($options) || empty($options)) {
+            throw new \RuntimeException('Invalid packed config file');
+        }
+
+        return $options;
+    }
+
+    /**
+     * Get file content as PHP array
+     *
+     * @param string $path     Path to file
+     * @param array  $pathInfo pathinfo() array
+     *
+     * @return array
+     *
+     * @throws \Exception
+     */
+    protected static function getFileContent(string $path, array $pathInfo): array
+    {
+        switch ($pathInfo['extension']) {
             case 'php':
-                $aOptions = require $sPath;
+                $options = require $path;
 
                 break;
             case 'ini':
-                $aOptions = \parse_ini_file($sPath, static::$iniProcessSections, static::$iniScannerMode);
+                $options = \parse_ini_file($path, static::$iniProcessSections, static::$iniScannerMode);
 
                 break;
             case 'json':
-                $aOptions = \json_decode(\file_get_contents($sPath), true);
+                $options = \json_decode(\file_get_contents($path), true);
 
                 break;
             default:
-                throw new \Exception('Unsupported filetype: ' . $aPathinfo['extension']);
+                throw new \Exception('Unsupported filetype: ' . $pathInfo['extension']);
         }
 
-        return \is_array($aOptions) ? $aOptions : [];
+        return \is_array($options) ? $options : [];
     }
 
     /**
@@ -183,13 +212,69 @@ class ConfigHelper
     protected static function set(string $key, $value): void
     {
         if (\is_array($value)) {
-            foreach ($value as $key2 => $val2) {
-                $key_path = $key . '.' . $key2;
-                self::set($key_path, $val2);
+            foreach ($value as $subKey => $subValue) {
+                self::set($key . '.' . $subKey, $subValue);
             }
         }
 
         // Set
-        static::$aData[$key] = $value;
+        static::$data[$key] = $value;
+    }
+
+    /**
+     * Get the packed filename based on the original filename.
+     *
+     * @param string $file Path to the original config file
+     *
+     * @return string
+     */
+    private static function getPackedFilename(string $file): string
+    {
+        return \dirname($file) . DIRECTORY_SEPARATOR . \basename($file, '.php') . '.packed.php';
+    }
+
+    /**
+     * Pack the config file by removing comments and multiple spaces.
+     *
+     * @param string $file Path to the original config file
+     *
+     * @return string Packed config content
+     */
+    private static function packConfigFile(string $file): string
+    {
+        $configTmp     = '';
+        $commentTokens = [T_COMMENT, T_DOC_COMMENT];
+        $tokens        = \token_get_all(\file_get_contents($file));
+
+        foreach ($tokens as $token) {
+            if (\is_array($token) && \in_array($token[0], $commentTokens)) {
+                continue;
+            }
+            $configTmp .= \is_array($token) ? $token[1] : $token;
+        }
+
+        return \trim(\preg_replace('/\s+/', ' ', $configTmp));
+    }
+
+    /**
+     * Write the packed config to a file with retries.
+     *
+     * @param string $packedFilename Path to the packed config file
+     * @param string $packedConfig   Packed config content
+     *
+     * @return void
+     *
+     * @throws \RuntimeException
+     */
+    private static function writePackedConfig(string $packedFilename, string $packedConfig): void
+    {
+        for ($i = 0; $i < 3; ++$i) {
+            if (\file_put_contents($packedFilename, $packedConfig, LOCK_EX) !== false) {
+                return;
+            }
+            \usleep(100000);
+        }
+
+        throw new \RuntimeException('Failed to write packed config file');
     }
 }
