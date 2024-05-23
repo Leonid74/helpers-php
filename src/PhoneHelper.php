@@ -308,13 +308,13 @@ class PhoneHelper
                 foreach ($country as $subCode => $prefixes) {
                     foreach ($prefixes as $prefix) {
                         if (\str_starts_with($phoneNumber, '+' . $code . $prefix)) {
-                            return $code;
+                            return (string) $code;
                         }
                     }
                 }
             } else {
                 if (\str_starts_with($phoneNumber, '+' . $code)) {
-                    return $code;
+                    return (string) $code;
                 }
             }
         }
