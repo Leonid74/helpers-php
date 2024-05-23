@@ -20,8 +20,11 @@ namespace Leonid74\Helpers;
 class PhoneHelper
 {
     private static $countryCodes = [
+        '7' => [
+            'Российская Федерация' => ['9'],
+            'Казахстан'            => ['7'],
+        ],
         '1'   => 'США/Канада',
-        '7'   => 'Россия/Казахстан',
         '20'  => 'Египет',
         '21'  => 'Южная Африка',
         '22'  => 'Марокко',
@@ -139,7 +142,7 @@ class PhoneHelper
         return [
             'formattedNumber' => $phoneNumber,
             'countryCode'     => $countryCode,
-            'countryName'     => self::$countryCodes[$countryCode],
+            'countryName'     => self::getCountryNameFromPhoneNumber($phoneNumber, $countryCode),
         ];
     }
 
@@ -294,9 +297,48 @@ class PhoneHelper
     {
         // Extract the country code from the phone number
         foreach (self::$countryCodes as $code => $country) {
-            if (\str_starts_with($phoneNumber, '+' . $code)) {
-                return $code;
+            if (\is_array($country)) {
+                foreach ($country as $subCode => $prefixes) {
+                    foreach ($prefixes as $prefix) {
+                        if (\str_starts_with($phoneNumber, '+' . $code . $prefix)) {
+                            return $code;
+                        }
+                    }
+                }
+            } else {
+                if (\str_starts_with($phoneNumber, '+' . $code)) {
+                    return $code;
+                }
             }
+        }
+
+        return null;
+    }
+
+    /**
+     * Determines the name of the country by phone number and code of the country.
+     *
+     * Определяем название страны по номеру телефона и коду страны.
+     *
+     * @param string $phoneNumber the formatted phone number
+     * @param string $countryCode the country code
+     *
+     * @return string|null the country code, or null if the country code cannot be determined
+     */
+    private static function getCountryNameFromPhoneNumber(string $phoneNumber, string $countryCode): ?string
+    {
+        $country = self::$countryCodes[$countryCode];
+
+        if (\is_array($country)) {
+            foreach ($country as $name => $prefixes) {
+                foreach ($prefixes as $prefix) {
+                    if (\str_starts_with($phoneNumber, '+' . $countryCode . $prefix)) {
+                        return $name;
+                    }
+                }
+            }
+        } else {
+            return $country;
         }
 
         return null;
