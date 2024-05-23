@@ -368,7 +368,7 @@ class StringHelper
     public static function hidingData($data = null, array $aDataToHide = []): string
     {
         if (empty($data) || (empty(static::$aDataToHide) && empty($aDataToHide))) {
-            return $data;
+            return $data ?: '';
         }
 
         $aDataToHide = empty(static::$aDataToHide)
